@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="../2-测试/assert.css">
+</head>
+<body>
+    <div id="results"></div>
+</body>
+</html>
+<script src="../2-测试/assert.js"></script>
+<script>
+    function Ninja() {
+        var feints = 0;
+
+        this.getFeints = function() {
+            return feints;
+        }
+
+        this.feint = function() {
+            feints++;
+        }
+    }
+
+    var ninja = new Ninja();
+
+    ninja.feint();
+
+    assert(ninja.getFeints() === 1, '我们能访问到这个内部的feint数量');
+    assert(ninja.feints === undefined, '私有变量不能被访问到');
+</script>
