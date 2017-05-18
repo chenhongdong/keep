@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="../2-测试/assert.css">
+</head>
+<body>
+    <div id="results"></div>
+</body>
+</html>
+<script src="../2-测试/assert.js"></script>
+<script>
+    var outerValue = 'ninja';
+
+    var later;
+
+    function outerFunc() {
+        var innerValue = 'samurai';
+
+        function innerFunc(params) {
+            assert(outerValue, 'Inner can see the ninja');
+            assert(innerValue, 'Inner can see the samurai');
+            assert(params, 'Inner can see the wiki');
+            assert(toolate, 'Inner can see the Robin');
+        }
+
+        later = innerFunc;
+    }
+
+    assert(!toolate, "Outer can't see the Robin")
+
+    var toolate = 'Robin';  
+
+    outerFunc();
+    later('wiki');
+</script>
