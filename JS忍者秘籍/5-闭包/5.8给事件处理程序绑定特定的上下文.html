@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="../2-测试/assert.css">
+</head>
+<body>
+    <button id="test">Click Me!</button>
+    <div id="results"></div>
+</body>
+</html>
+<script src="../2-测试/assert.js"></script>
+<script>
+    function bind(context, name) {
+        return function () {
+            return context[name].apply(context, arguments);
+        }
+    }
+
+    var button = {
+        clicked: false,
+        click: function () {
+            this.clicked = true;
+            assert(button.clicked, '按钮已经被点击了');
+            console.log(this);
+        }
+    };
+
+    var ele = document.getElementById('test');
+    ele.addEventListener('click', bind(button, 'click'), false);
+</script>
