@@ -6,9 +6,11 @@
     <link rel="stylesheet" href="../2-测试/assert.css">
 </head>
 <body>
+<a href="javascript:;" onclick="toNext()">链接1</a>
     <div id="results"></div>
 </body>
 </html>
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <script src="../2-测试/assert.js"></script>
 <script>
     var outerValue = 'ninja';
@@ -29,4 +31,25 @@
     outerFunc();
 
     later();
+
+
+    function addHistory(id) {
+        history.pushState({'id' : id}, null, '');
+    }
+
+    window.onpopstate = function () {
+        if (history.state) {
+            let state = history.state;
+
+
+            console.log(state);
+        }
+    }
+
+    function toNext() {
+        alert(1);
+        addHistory(2);
+        location.href = '5.6在计时器间隔回调中使用闭包.html';
+    }
+
 </script>
