@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../2-测试/assert.css">
+</head>
+<body>
+<div id="results"></div>
+</body>
+</html>
+<script src="../2-测试/assert.js"></script>
+<script>
+    function compress(source) {
+        var keys = {};
+
+        source.replace(/([^=&]+)=([^&]*)/g, function (full, key, value) {
+            keys[key] = (keys[key] ? keys[key] + ',' : '') + value;
+            return '';
+        });
+
+        var result = [];
+
+        for (var key in keys) {
+            result.push(key + '=' + keys[key]);
+        }
+
+        return result.join('&');
+    }
+
+    assert(compress('foo=1&foo=2&blah=a&blah=b&foo=3') == 'foo=1,2,3&blah=a,b', 'compress is ok');
+</script>
