@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    (function () {
+        var queue = [], paused = false;
+
+        this.test = function (fn) {
+            this.queue.push(fn);
+            runTest();
+        };
+
+        this.pause = function () {
+            paused = true;
+        };
+
+        this.resume = function () {
+            paused = false;
+            setTimeout(runTest, 1);
+        };
+        
+        function runTest() {
+            if (!paused && queue.length) {
+                queue.shift()();
+                if (!paused) resume();
+            }
+        }
+    })();
+</script>
