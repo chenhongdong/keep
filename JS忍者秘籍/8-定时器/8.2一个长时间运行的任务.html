@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+    <tbody></tbody>
+</table>
+
+<script>
+    var tbody = document.getElementsByTagName('tbody')[0];
+
+    for (var i = 0; i < 20000; i++) {
+        var tr = document.createElement('tr');
+
+        for (var t = 0; t < 6; t++) {
+            var td = document.createElement('td');
+            td.appendChild(document.createTextNode(i + ',' + t));
+            tr.appendChild(td);
+        }
+
+        tbody.appendChild(tr);
+    }
+</script>
+</body>
+</html>

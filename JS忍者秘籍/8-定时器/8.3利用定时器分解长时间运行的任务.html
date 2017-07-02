@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+    <tbody></tbody>
+</table>
+</body>
+</html>
+<script>
+    // 建立数据
+    var rowCount = 20000;
+    var divideInto = 4;
+    var chunkSize = rowCount/divideInto;
+    var iteration = 0;
+
+    var table = document.getElementsByTagName('tbody')[0];
+
+    setTimeout(function generateRows() {
+        // 计算上次中断的地方
+        var base = (chunkSize) * iteration;
+        for (var i = 0; i < chunkSize; i++) {
+            var tr = document.createElement('tr');
+            for (var t = 0; t < 6; t++) {
+                var td = document.createElement('td');
+                td.appendChild(document.createTextNode((i + base) + ',' + t + ',' + iteration));
+                tr.appendChild(td);
+            }
+            table.appendChild(tr);
+        }
+
+        // 调度下一阶段
+        iteration++;
+        if (iteration < divideInto)
+            setTimeout(generateRows, 0);
+    }, 0);
+    
+    
+    console.log( ([1, 2, 3] + ''));
+</script>
