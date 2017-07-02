@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>this的指向</title>
+	<style>
+		* {margin:0;padding:0;}
+		#box {width: 100px; height: 100px; background: #0c9;}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+
+
+	<script type="text/javascript">
+		// 1
+		var name = '全局变量';
+
+		var getName = function() {
+			return this.name;
+		}
+
+		console.log(getName());		//'全局变量'   this -> window
+
+
+		// 2
+		var a = '全局变量a';
+
+		var obj = {
+			a: '对象的属性a',
+			getA: function() {
+				return this.a;
+			}
+		}
+
+		var getProps = obj.getA;
+
+		console.log(getProps());	//全局变量a    this ->  window
+
+
+		// 3
+		var oDiv = document.getElementById('box');
+		window.id = 'window下';
+
+		/*oDiv.onclick = function() {
+			console.log(this.id);			// box			this -> oDiv
+			var callback = function() {
+				console.log(this.id);		// 'window下'   this -> window
+			}
+			callback();
+		};*/
+
+		//3 修复
+		oDiv.onclick = function() {
+			console.log(this.id);
+			var that = this;
+			var callback = function() {
+				console.log(that.id);
+			}
+			callback();
+		};
+	</script>
+</body>
+</html>
