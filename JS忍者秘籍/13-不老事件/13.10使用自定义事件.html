@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #img {display: none;}
+    </style>
+</head>
+<body>
+    <button id="clickMe">Start</button>
+    <img src="loading.gif" id="img">
+</body>
+</html>
+<script src="13.4-data.js"></script>
+<script src="13.3-fixup.js"></script>
+<script src="events.js"></script>
+<script src="13.9-trigger.js"></script>
+<script src="ajaxy-operation.js"></script>
+<script>
+    addEvent(window, 'load', function () {
+        var button = document.getElementById('clickMe');
+
+        addEvent(button, 'click', function () {
+            performAjaxOperation(this);
+        });
+
+        var body = document.getElementsByTagName('body')[0];
+
+        addEvent(body, 'ajax-start', function () {
+            document.getElementById('img').style.display = 'block';
+        });
+
+        addEvent(body, 'ajax-complete', function () {
+            document.getElementById('img').style.display = 'none';
+        });
+    });
+</script>

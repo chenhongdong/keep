@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="test1">One</div>
+<div id="test2">Two</div>
+<div id="test3">Three</div>
+</body>
+</html>
+<script src="13.4-data.js"></script>
+<script src="13.3-fixup.js"></script>
+<script src="events.js"></script>
+<script>
+    addEvent(window, 'load', function () {
+        var aDiv = document.getElementsByTagName('div');
+
+        for (var i = 0; i < aDiv.length; i++) (function (ele) {
+            addEvent(ele, 'mouseover', function handler(e) {
+                this.style.backgroundColor = 'yellow';
+            });
+
+            addEvent(ele, 'click', function handler(e) {
+                this.style.backgroundColor = '#f09';
+
+                removeEvent(ele, 'click', handler);
+            });
+        })(aDiv[i]);
+    });
+</script>
