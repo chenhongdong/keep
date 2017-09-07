@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button id="loginBtn">登录</button>
+<script>
+    // 实现登录浮窗的方法
+
+    // 第一种解决方案
+    let doc = document,
+        bd = doc.body;
+
+    /*var loginLayer = (function () {
+        var div = doc.createElement('div');
+        div.innerHTML = '我是登录浮窗';
+        div.style.display = 'none';
+        bd.appendChild(div);
+        return div;
+    })();
+
+    doc.getElementById('loginBtn').onclick = function () {
+        loginLayer.style.display = 'block';
+    };*/
+
+    // 问题:会白白浪费dom节点,有可能用户并不想登录
+
+
+
+    // 第二种解决方案
+    /*let createLoginLayer = function () {
+        let div = doc.createElement('div');
+        div.innerHTML = '我是登录浮窗';
+        div.style.display = 'none';
+        bd.appendChild(div);
+        return div;
+    };
+    doc.querySelector('#loginBtn').onclick = function () {
+        let loginLayer = createLoginLayer();
+        loginLayer.style.display = 'block';
+    };*/
+    // 问题:点击一次生成一个div,频繁创建和删除节点不合理
+
+
+
+    // 第三种解决方案
+    let createLoginLayer = (function () {
+        let div;
+        return function () {
+            if (!div) {
+                div = doc.createElement('div');
+                div.innerHTML = '我是登录浮窗';
+                div.style.display = 'none';
+                bd.appendChild(div);
+            }
+            return div;
+        }
+    })();
+    doc.querySelector('#loginBtn').onclick = function () {
+        let loginLayer = createLoginLayer();
+        loginLayer.style.display = 'block';
+    };
+</script>
+</body>
+</html>
