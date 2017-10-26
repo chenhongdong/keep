@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    function a(m, n) {
+    
+    }
+    console.log(a.length);  // 2 length为传递的参数数量
+    a.song = '带你去旅行';
+
+    let obj = {
+        a: 'a',
+        b: a,
+        get() {
+            return this.b;
+        }
+    };
+
+    let arr = [1, 2, 'alibaba'];
+
+    for (let k of arr) {
+        console.log(k);
+    }
+
+    /*
+    * 给函数添加自定义属性的目的可以达到缓存函数结果，在下次调用函数时减少重复的计算
+    * */
+    // param参数为基本数据类型时
+    let myFunc = function (param) {
+        if (!myFunc.cache[param]) {
+            let result = {};
+            // ...开销很大的操作...
+            myFunc.cache[param] = result;
+        }
+
+        return myFunc.cache[param];
+    };
+    // 缓存存储
+    myFunc.cache = {};
+
+    // 另一种是用arguments.callee来引用函数，而不是直接用函数名
+    // ES5的严格模式下不再支持arguments.callee方法，需要注意
+    let myFunc2 = function (param) {
+        let f = arguments.callee,
+            result;
+
+        if (!f.cache[param]) {
+            result = {};
+            // 很大的开销操作
+            f.cache[param] = result;
+        }
+        return f.cache[param];
+    };
+    // 缓存存储
+    myFunc2.cache = {};
+
+    // 最后：复杂的参数时，将参数序列化为json字符串
+    let func = function () {
+        let key = JSON.stringify(Array.prototype.slice.call(arguments)),
+            result;
+        console.log(key);
+        
+        if (!func.cache[key]) {
+            result = {};
+            // 很大开销的操作
+            func.cache[key] = result;
+        }
+        return func.cache[key];
+    };
+    // 缓存存储
+    func.cache = {};
+
+
+    func('hello', {word: '世界'}, [3,4,5]);
+
+
+
+
+    // 配置对象
+    // 开发一个addPerson方法然后需要加很多参数时，用一个对象来当参数
+    function addPerson(conf) { };
+
+    let conf = {
+        username: 'chd',
+        password: '********',
+        userId: '9527'
+    };
+
+    addPerson(conf);
+</script>

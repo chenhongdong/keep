@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div id="result"></div>
+<div class="box">123</div>
+</body>
+</html>
+<script>
+    var result = function() {
+        return 'abc';
+    };
+
+    function sum(x, y) {
+        result = x + y;
+        return result;
+    }
+    console.log(sum(1, 3));
+    
+    function foo() {
+        var a = b = 2;
+    }
+    foo();
+    //console.log(a);
+    console.log(b);
+    
+    var global_var = 1;
+    global_novar = 2;
+    (function () {
+        global_fromvar = 3;
+    })();
+
+    delete global_var;
+    delete global_novar;
+    delete global_fromvar;
+
+    var global = (function() {
+        return this;
+    })();
+
+    console.dir(global);
+
+    function updataElement() {
+        var el = document.querySelector('#result'),
+            style = el.style;
+
+        // 使用el和style再做其他事
+        function show() {
+            style.cssText = 'width:100px;height:100px;background:#0cc';
+            console.log(html);
+        }
+        show();
+
+
+        var html = document.querySelector('.box');
+
+    }
+
+    updataElement();
+</script>

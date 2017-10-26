@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>柯里化</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    // curry化add函数
+    function add(x, y) {
+        if (typeof y === 'undefined') {
+            return function (y) {
+                return x + y;
+            }
+        }
+
+        return x + y;
+    }
+
+    console.log(add(5, 3));
+    let newAdd = add(1);
+    console.log(newAdd(9));
+
+    // 实现通用curry函数
+    function curry(fn) {
+        let slice = Array.prototype.slice,
+            old_arg = slice.call(arguments, 1);
+
+        return function () {
+            let new_arg = slice.call(arguments);
+            let args = old_arg.concat(new_arg);
+            console.log(args);
+            return fn.apply(null, args);
+        }
+    }
+
+    // 普通函数
+    function sum(x, y) {
+        return x + y;
+    }
+
+    // 柯里化sum
+    let sum1 = curry(sum, 9);
+    console.log(sum1(2));
+    // 或  curry(sum, 8)(9)
+    console.log(curry(sum, 8)(9));
+
+    function num(a, b, c, d, e) {
+        return a + b + c + d + e;
+    }
+    console.log(curry(num, 1, 2, 3)(5, 10));
+    
+    // 两步柯里化
+    let one = curry(num, 1);
+    one(10, 10, 10, 10);
+    let two = curry(one, 2, 3);
+    console.log(two(5, 5));     // 16
+</script>
