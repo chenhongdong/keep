@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>私有静态成员</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+	/*
+		属性：
+			1.以同一个构造函数创建的所有对象共享该成员
+			2.构造函数外部不能访问到
+	*/
+
+	var Gadget = (function() {
+		// 静态成员/属性
+		var counter = 0;
+		// 返回
+		// 该构造函数新的实现
+		return function() {
+			console.log(counter += 1);
+		};
+	}());	// 立即执行
+
+	// var g1 = new Gadget();
+	// var g2 = new Gadget();
+	// var g3 = new Gadget();
+
+
+	// 例子： 在此基础上，增加一个特权方法getLastId()以访问静态私有属性
+	// 构造函数
+	var Gadget = (function() {
+		// 静态变量/属性
+		var counter = 0,
+			NewGadget;
+		// 新的构造函数
+		NewGadget = function() {
+			counter++;
+		};
+		// 特权方法
+		NewGadget.prototype.getLastId = function() {
+			return counter;
+		};
+		// 覆盖该构造函数
+		return NewGadget;
+
+	}());
+
+	var iphone = new Gadget();
+	console.log(iphone.getLastId());
+	var ipad = new Gadget();
+	console.log(ipad.getLastId());
+	var ipod = new Gadget();
+	console.log(ipod.getLastId());
+</script>

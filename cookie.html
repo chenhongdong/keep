@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+	var str = 'BAIDUID=8BA7DD2E6BBD520F23AC9115F16B9F52:FG=1; PSTM=1498321455; BIDUPSID=F6576C2172C997AD2157F0E8CDC8641A; cflag=15%3A3; FP_UID=8aa10787b89ea4839b4d2c3d102f77fc; BD_HOME=1; BD_UPN=123253; sugstore=0; BDRCVFR[feWj1Vr5u3D]=I67x6TjHwwYf0; H_PS_645EC=1bcfZ9kTYtVadpEJoMZRm22z95XavO3h%2BPn394YtxyosCuN6BH%2FoU%2FM%2FMlOS3TdwwsHz; BD_CK_SAM=1; PSINO=1; H_PS_PSSID=1426_24868_21088_18559_17001_24880_22158; BDORZ=B490B5EBF6F3CD402E515D22BCDA1598; BDSVRTM=0';
+
+	function getCookie(name) {
+		var arr = name.split('; ');
+		var obj = {};
+		for (var i = 0, len = arr.length; i < len; i++) {
+			var arr2 = arr[i].split('=');
+			obj[arr2[0]] = arr2[1];
+		}
+		return obj;
+	}
+
+	var aaa = getCookie(str);
+	var s = 'hello';
+	s = 'world';
+	console.log(s);
+
+	console.log('' == false)
+	console.log(0 == false);
+	console.log(undefined == null);
+	console.log(Boolean(null) == false)
+	console.log(Boolean(NaN) == false);
+</script>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>沙箱模式</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+	// 一个全局构造函数
+	/*new Sandbox(function(box) {
+		// code...
+	});*/
+
+	// 实现构造函数
+	function Sandbox() {
+		// 将参数转换成一个数组
+		var args = Array.from(arguments),	// ES6 Array.from()转换类数组为真正的数组
+		// 最后一个参数是回调
+		callback = args.pop(),
+		// 模块可以作为一个数组传递，或作为单独的参数传递
+		modules = (args[0] && typeof args[0] === 'string') ? args : args[0],
+		i;
+		console.log(args)	
+		// 确保该函数作为构造函数 被调用
+		if (!(this instanceof Sandbox)) {
+			return new Sandbox(modules, callback);
+		}	
+
+		// 需要向this添加的属性
+		this.a = 1;
+		this.b = 2;
+
+		// 现在向该核心this对象添加模块
+		// 不指定模块名称或指定'*'都表示'使用所有模块'
+		if (!modules || modules === '*') {
+			modules = [];
+			for (i in Sandbox.modules) {
+				if (Sandbox.modules.hasOwnProperty(i)) {
+					modules.push(i);
+				}
+			}
+		}
+
+		// 初始化所需的模块
+		for (i = 0; i < modules.length; i++) {
+			Sandbox.modules[modules[i]](this);
+		}
+
+		callback(this);
+	}
+
+
+	// 所需的任何原型属性
+	Sandbox.prototype = {
+		name: 'My Application',
+		version: '1.0.0',
+		getName: function() {
+			return this.name;
+		}
+	};
+
+
+
+	/*Sandbox('ajax', 'event', 'dom', function(box) {
+		console.log(box)
+	});*/
+
+	Sandbox('*', function(box) {
+		console.log(box);
+	});
+
+</script>
