@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>链模式</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+	/*
+		链模式可以一个接一个的调用对象的方法
+		如：	myobj.method1('hello').method2().method3('world').method4();
+	*/
+	var obj = {
+		value: 1,
+		increment() {
+			this.value++;
+			return this;
+		},
+		add(n) {
+			this.value += n;
+			return this;
+		},
+		short() {
+			alert(this.value);
+		}
+	}
+
+	// 链式调用
+	obj.increment().add(3).short();
+</script>

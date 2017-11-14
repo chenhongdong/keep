@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+	/*
+		JS中使用命名约定，常量全部用大写显示
+		如：内置常量： Math.PI   Math.SQRT2   Number.MAX_VALUE
+	*/
+
+	// 自己写的常量
+	// 1-构造函数
+	var Widget = function() {
+		// code
+	};
+	// 常量		以静态属性的方式添加到构造函数
+	Widget.MAX_HEIGHT = 320;
+	Widget.MAX_WIDTH = 480;
+
+	// 2-对象字面量设置常量
+	var obj = {
+		data: [],
+		MAX_HEIGHT: 480,
+		PI: Math.PI
+	}
+
+
+	// 一个通用的constant（常量）对象实现方法
+	/*
+		set(name, value)
+			定义一个新的常量
+		isDefined(name)
+			检测指定常量是否存在
+		get(name)
+			读取指定常量的值
+	*/
+
+	var constant = (function() {
+		var constants = {},
+			ownProp = Object.prototype.hasOwnProperty,
+			allowed = {
+				string: 1,
+				number: 1,
+				boolean: 1
+			},
+			prefix = (Math.random() + '_').slice(2);
+
+		return {
+			set(name, value) {
+				if (this.isDefined(name)) {
+					return false
+				}
+				if (!ownProp.call(allowed, typeof value)) {
+					return false;
+				}
+				constants[prefix + name] = value;
+			},
+			isDefined(name) {
+				return ownProp.call(constants, prefix + name);
+			},
+			get(name) {
+				if (this.isDefined(name)) {
+					return constants[prefix + name];
+				}
+				return null;
+			}
+		}
+	}());
+
+
+	// 检测是否已经存在
+	constant.isDefined('maxwidth');
+	// 定义
+	constant.set('maxwidth', 512);
+	constant.isDefined('maxwidth');
+
+	// 试图重新定义
+	constant.set('maxwidth', 1024);
+
+	// 读取
+	constant.get('maxwidth');
+</script>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>语法糖method</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+	/*
+		构造函数中，向this添加方法的机制效率低下
+		原因：它们最终都会与每个实例一起被重新创建，并且消耗更多的内存
+
+		这也就是为什么可复用的方法应该添加到构造函数的prototype属性中
+	*/
+	// 语法糖：向编程语言中添加便利的功能
+
+
+	if (typeof Function.prototype.method !== 'function') {
+		Function.prototype.method = function(name, fn) {
+			this.prototype[name] = fn;
+			return this;
+		}
+	}
+
+
+
+	var Person = function(name) {
+		this.name = name;
+	}.
+		method('getName', function() {
+			return this.name;
+		}).
+		method('setName', function(name) {
+			this.name = name;
+			return this;
+		});
+
+
+	var a = new Person('Grad');
+	console.log(a.getName());
+	a.setName('Eric');
+	console.log(a.getName());
+
+
+	
+</script>
