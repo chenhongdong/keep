@@ -31,6 +31,18 @@
     
     var kid = new Child();
     console.log(kid.name);
+
+    // 优化inherit函数
+    // 避免在每次需要继承时都创建临时构造函数，使用即时函数和闭包
+    var inherit = (function() {
+        var F = function (){};
+        return function(C, P) {
+            F.prototype = P.prototype;
+            C.prototype = new F();
+            C.uber = P.prototype;   // 存储超类
+            C.prototype.constructor = C;
+        }
+    }());
 </script>
 </body>
 </html>
