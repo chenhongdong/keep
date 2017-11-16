@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+    /*
+    * 实现类式继承的目标是通过构造函数Child()获取来自于另一个构造函数Parent()的属性，从而创建对象。
+    * */
+
+    // 父构造函数
+    function Parent(name) {
+        this.name = name || 'Adam';
+    }
+
+    // 向该原型添加功能
+    Parent.prototype.say = function () {
+        return this.name;
+    };
+
+    // 空白的子构造函数
+    function Child(name) {}
+
+    // 继承的魔力发生在这里
+    inherit(Child, Parent);
+
+    // #1
+    // 默认模式
+    function inherit(Child, Parent) {
+        Child.prototype = new Parent();
+    }
+
+    /*
+    *   原型属性应该指向一个对象，而不是一个函数
+    *   因此它必须指向一个由父构造函数所创建的实例
+    *   而不是构造函数本身。
+    * */
+
+    var kid = new Child();
+    kid.say();  // 输出'Adam'
+    kid.name = 'Jay Chou';
+    kid.say();
+    delete kid.name;
+    kid.say();
+    console.log(new Parent);
+
+    // 缺点：  同时继承了两个对象的属性
+    //        即添加到this的属性和原型的属性
+
+    var s = new Child('Chris');
+    s.say();    // 'Adam'   传递了'Chris'但是，创建的实例的name并没有显示'Chris'
+</script>
+</body>
+</html>

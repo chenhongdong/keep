@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    // 借用和设置原型，解决借用构造函数不能继承原型上属性的问题
+    // 父构造函数
+    function Parent(name) {
+        this.name = name || 'Adam';
+    }
+    Parent.prototype.say = function () {
+        return this.name;
+    };
+    // 子构造函数
+    function Child(name) {
+        Parent.apply(this, arguments);
+    }
+    Child.prototype = new Parent();
+
+    var c1 = new Child('刘德华');
+    c1.name;
+    c1.say();
+    delete c1.name;
+    c1.say();
+
+    // 唯一的缺点：父构造函数会被调用两次，最后，自身的属性也会被继承两次
+</script>
+</body>
+</html>
