@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    // 实现复制继承
+    function extend(parent, child) {
+        var i;
+        child = child || {};
+        for (i in parent) {
+            if (parent.hasOwnProperty(i)) {
+                child[i] = parent[i];
+            }
+        }
+        return child;
+    }
+    
+    // 测试
+    var dad = {name: '爸爸'};
+    var kid = extend(dad);  // 属于浅复制
+    console.log(kid.name);
+    
+    // 浅复制的时候，如果子对象改变的恰好是一个对象，那么会同时修改父对象
+    // 如下例
+    var dad = {
+        counts: [1,2,3],
+        reads: {paper: true}
+    };
+    
+    var kid = extend(dad);
+    kid.counts.push('007');     // 子对象修改了counts数组属性，改变了父对象
+    console.log(dad.counts.toString());     // '1,2,3,007'
+    console.log(dad.reads === kid.reads);   // true
+
+
+
+    /*
+    *   实现深复制
+    *       1.检查某个属性的类型是否为对象
+    *       2.为对象的话需要递归复制出该对象的属性
+    *       3.检查该对象是否为一个真实的对象或数组
+    * */
+
+    function extendDeep(parent, child) {
+        var i,
+            toStr = Object.prototype.toString,
+            astr = "[object Array]";
+
+        child = child || {};
+        for (i in parent) {
+            if (parent.hasOwnProperty(i)) {
+                if (typeof parent[i] === 'object') {
+                    child[i] = (toStr.call(parent[i]) === astr) ? [] : {};
+                    extendDeep(parent[i], child[i]);
+                } else {
+                    child[i] = parent[i];
+                }
+            }
+        }
+
+        return child;
+    }
+    
+    var d = {
+        counts: [1,2,3],
+        reads: {paper: true}
+    };
+    var k = extendDeep(d);
+    k.counts.push(44);
+    console.log(k.counts.toString());   // '1,2,3,44'
+    console.log(d.counts.toString());   // '1,2,3'
+    
+    console.log(d.reads === k.reads);   // false, 不是同一个引用
+    k.reads.paper = false;
+    k.reads.web = true;
+    console.log(d.reads.paper); // true, 不影响父对象
+</script>
+</body>
+</html>
