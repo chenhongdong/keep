@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div class="box">1</div>
+	<div class="box">2</div>
+	<div class="box">3</div>
+	<script>
+		/*
+			借用方法，只使用需要的方法，不需要继承那些永远不会用到的其他方法。
+			通过call()和apply()函数方法来实现
+		*/
+
+		// call
+		// notmyobj.doStuff.call(myobj, param1, p2, p3);
+		// apply
+		// notmyobj.doStuff.apply(myobj, [param1, p2, p3]);
+
+
+		// 例子： 借用数组的方法
+		// 类数组转数组
+		function f() {
+			var args = [].slice.call(arguments, 1, 3);	// 创建一个空数组以使用数组的方法
+			return args;
+		}
+
+		alert(f(1,2,3,4,5,6,7));	// [2, 3]
+
+		// 用Array.prototype.slice.call()方法替换[].slice.call()的好处是可以节省创建一个空数组的工作
+
+		// ES6实现 Array.from() 来转换成数组
+		var aDiv = document.querySelectorAll('.box');
+		console.log(Array.from(aDiv));
+	</script>
+</body>
+</html>

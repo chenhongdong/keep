@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		/*
+			ES5添加了bind()方法
+
+			var newFunc = obj.someFunc.bind(myobj, 1, 2, 3);
+			上述表达式的含义将someFunc和myobj绑定在一起
+			并且预填充了someFunc的前三个参数
+		*/
+
+		// 实现polyfill的bind()方法
+		if (typeof Function.prototype.bind === 'undefined') {
+			Function.prototype.bind = function (obj) {
+				var fn = this,
+					slice = Array.prototype.slice,
+					args = slice.call(arguments, 1);
+
+				return function () {
+					return fn.apply(obj, args.concat(slice.call(arguments)));
+				};
+			};
+		}
+
+		// 例子
+		// one对象且具有say方法
+		var one = {
+			name: 'object',
+			say(greet) {
+				return greet + ', ' + this.name;
+			}
+		};
+
+		var two = {
+			name: 'another object'
+		};
+
+		// 测试1
+		var ts = one.say.bind(two);
+		ts('Bonjour');		// Bonjour, another object
+
+		// 测试2，第二个参数
+		var ty = one.say.bind(two, '你好');
+		ty();				// 你好， another object
+	</script>
+</body>
+</html>
