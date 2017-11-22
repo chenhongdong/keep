@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>策略模式</title>
+</head>
+<body>
+	<div id="box" style="background: #00a1f5; color: #fff; padding: 4px;"></div>
+</body>
+</html>
+<script>
+	/*
+		使用策略模式的其中一个例子是解决表单验证的问题
+		可以创建一个具有validate()方法的验证器(validator)对象
+		验证器将选择最佳的策略以处理任务，并且将具体的数据验证委托给适当的算法。
+	*/
+
+	// 数据验证示例
+
+	// 待验证的数据
+	let data = {	
+		first_name: 'Super',
+		last_name: 'Man',
+		age: 'unknown',
+		username: 'o_o'
+	};
+
+	// 核心的validator对象
+	let validator = {
+		// 所有可用的检查
+		types: {},
+
+		// 在当前验证会话中的错误消息
+		messages: [],
+
+		// 当前验证配置  名称：验证类型
+		config: {},
+
+		// 接口方法
+		// data为 键-值对
+		validate(data) {
+			let i, msg, type, checker, result_ok;
+
+			// 重置所有消息
+			this.messages = [];
+
+			for (i in data) {
+
+				if (data.hasOwnProperty(i)) {
+
+					type = this.config[i];
+					checker = this.types[type];
+
+					if (!type) {
+						continue;	// 不需要验证
+					}
+
+					if (!checker) {
+						throw {
+							name: 'ValidatorError',
+							message: '不能处理这类' + type
+						}
+					}
+
+					result_ok = checker.validate(data[i]);
+					if (!result_ok) {
+						msg = '无效的值' + i + ', ' + checker.instructions;
+						this.messages.push(msg);
+					}
+				}
+
+			}
+			return this.hasErrors();	// 返回布尔值
+		},
+		// 帮助程序
+		hasErrors() {
+			return this.messages.length !== 0;
+		}
+	};
+
+	
+	// 实现验证程序
+	// 非空值的检查
+	validator.types.isNonEmpty = {
+		validate(value) {
+			return value !== '';
+		},
+		instructions: '该值不能为空'
+	};
+	// 检查值是否为一个数字
+	validator.types.isNumber = {
+		validate(value) {
+			return !isNaN(value);
+		},
+		instructions: '只能是有效的数字'
+	};
+	// 检查该值是否只包含字母和数字
+	validator.types.isAlphaNum = {
+		validate(value) {
+			return !/[^a-z0-9]/i.test(value);
+		},
+		instructions: '只能包含字符串和数字，不能包含特殊字符'
+	};
+
+
+	// 配置该验证器，并且设置认为是有效的且可接受的规则
+	// 比如：对姓氏不做需求且接受任意字符作为名字
+	//		年龄必须为数字
+	//		用户名仅数字和字母无特殊字符
+
+	validator.config = {
+		first_name: 'isNonEmpty',
+		// last_name: 'isNumber',
+		age: 'isNumber',
+		username: 'isAlphaNum'
+	};
+
+	// validator对象配置完毕并且可用于数据处理，可以调用validator对象的validate()方法并且将任意验证错误信息打印
+	
+	validator.validate(data);
+	if (validator.hasErrors()) {
+		document.querySelector('#box').innerHTML = validator.messages.join('<br />');
+	}
+</script>
