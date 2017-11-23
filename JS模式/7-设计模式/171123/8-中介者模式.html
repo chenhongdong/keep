@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div id="result"></div>
+</body>
+</html>
+<script>
+	/*
+		中介者模式： 独立的对象之间不通信，而是通过中介者对象
+		很像MVC的感觉
+	*/
+	// 例子
+
+	// player对象由Player()构造函数所创建，具有points和name属性。
+	// 原型中的play方法递增分数，然后通知中介者
+	function Player(name) {
+		this.points = 0;
+		this.name = name;
+	}
+
+	Player.prototype.play = function() {
+		this.points++;
+		mediator.played();
+	};
+
+	// scoreboard对象有一个update方法，在轮到每个玩家游戏结束之后mediator对象调用该方法
+	let scoreboard = {
+		// 待更新的HTML元素
+		element: document.querySelector('#result'),
+		// 更新分数
+		update(score) {
+			let i, msg = '';
+
+			for (i in score) {
+				if (score.hasOwnProperty(i)) {
+					msg += `<p><strong>${i}</strong>: ${score[i]}</p>`;
+				}
+			}
+
+			this.element.innerHTML = msg;
+		}
+	};
+
+	/*
+		mediator对象
+		首先初始化游戏，通过setup()方法创建了player对象，然后将创建的player对象记录到自己的players属性中
+		其中，played()方法将在每轮游戏后由player所调用
+		该方法用于更新score并将其发送到scoreboard中以更新显示分数
+		最后一个方法keypress(),它用于处理键盘事件
+	*/ 
+	let mediator = {
+
+		players: {},
+		// 初始化
+		setup() {
+			let players = this.players;
+			players.home = new Player('Home');
+			players.guest = new Player('Guest');
+		},
+		// 如果有人玩，则更新分数
+		played() {
+			let players = this.players,
+				score = {
+					home: players.home.points,
+					guset: players.guest.points
+				};
+
+			scoreboard.update(score);
+		},
+		// 键盘事件
+		keypress(e) {
+			e = e || event;
+			// 按键1
+			if (e.which === 49) {	
+				mediator.players.home.play();
+				return;
+			}
+			// 按键0
+			if (e.which === 48) {
+				mediator.players.guest.play();
+				return;
+			}
+		}
+	};
+
+
+
+	// 运行
+	mediator.setup();
+	window.onkeypress = mediator.keypress;
+
+	setTimeout(() => {
+		window.onkeypress = null;
+		alert('Game over');
+	}, 30000);
+</script>
