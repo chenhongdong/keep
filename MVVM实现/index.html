@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>源码分析</title>
+	<style>
+		#app {
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<h2>{{title}}</h2>
+		<input v-model="name">
+		<h1>{{name}}</h1>
+		<button @click="clickMe">点击！</button>
+	</div>
+</body>
+<script src="js/observer.js"></script>
+<script src="js/watcher.js"></script>
+<script src="js/compile.js"></script>
+<script src="js/index.js"></script>
+<script>
+
+	new Vue({
+		el: 'app',
+		data: {
+			title: 'vue code',
+			name: 'imooc'
+		},
+		methods: {
+			clickMe() {
+				this.title = 'vue code click';
+			}
+		},
+		mounted() {
+			window.setTimeout(() => {
+				this.title = '1秒';
+			}, 1000);
+		}
+	});
+
+</script>
+</html>
