@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>groupList demo</title>
+  
+  <script type='text/javascript' src='http://cdn.staticfile.org/jquery/1.11.1/jquery.js'></script>
+  
+  <style type='text/css'>
+    dl dt{background:#ccc;padding:5px;}
+    dl li{padding:5px;list-style: none;}
+    p{height:100px;}
+    html,body{margin:0;padding:0;}
+  </style>
+  
+
+
+<script type='text/javascript'>//<![CDATA[ 
+$(function(){
+    //$('dl').groupList();      //相对窗口顶部
+    $('dl').groupList(true);
+});
+$.fn.groupList = function(selfScroll){
+     var list = this;
+    var listTopOffset = list.offset().top;
+    var titleHeight = $(list).find('dt:first').height();
+
+    var currentContext = selfScroll ? list : window;
+    if(selfScroll){
+        list.css({
+            'height':$(window).height() - listTopOffset,
+            'overflow':'auto'
+        });
+    }
+    $(currentContext).on('scroll',function(){
+        if($(currentContext).scrollTop()-(selfScroll ? 0 : listTopOffset) < titleHeight){
+            clearFixed();
+        }else{
+            var lis = list.find('li');
+            for(var i = 0, len = lis.length ; i < len ; i++){
+                if(isOnSight(lis[i])){
+                    clearFixed().filter('.clone').remove();
+                    lis.eq(i).parent().parent().prev().clone(true).addClass('clone').css({
+                        'top': selfScroll ? listTopOffset : 0,
+                        'position':'fixed',
+                        'width':'100%'
+                    }).appendTo(list);
+                    break;
+                }
+            }
+        }
+    });
+    var isOnSight = function(item){
+        return selfScroll ? listTopOffset < $(item).offset().top + $(item).outerHeight() : $(currentContext).scrollTop() <  $(item).offset().top + $(item).outerHeight();
+    }
+    var clearFixed = function(){
+        return $(list).find('dt').css({
+            'position':''
+        });
+    }
+}
+//]]>  
+
+</script>
+
+
+</head>
+<body>
+    <p>ale</p>
+  <dl>
+    <dt>A</dt>
+    <dd>
+        <ul>
+            <li>abandon</li>
+            <li>abnormal</li>
+            <li>abstinence</li>
+            <li>abort</li>
+            <li>abortive</li>
+            <li>abeyance</li>
+            <li>abscond</li>
+            <li>absolve</li>
+            <li>abrogate</li>
+            <li>about</li>
+            <li>abandon</li>
+            <li>abnormal</li>
+            <li>abstinence</li>
+            <li>abort</li>
+            <li>abortive</li>
+            <li>abeyance</li>
+            <li>abscond</li>
+            <li>absolve</li>
+            <li>abrogate</li>
+            <li id='check'>about</li>
+            <li>abandon</li>
+            <li>abnormal</li>
+            <li>abstinence</li>
+            <li>abort</li>
+            <li>abortive</li>
+            <li>abeyance</li>
+            <li>abscond</li>
+            <li>absolve</li>
+            <li>abrogate</li>
+        </ul>
+    </dd>
+    <dt>B</dt>
+    <dd>
+        <ul>
+            <li>banana</li>
+            <li>blue</li>
+            <li>background</li>
+            <li>backward</li>
+            <li>bacon</li>
+            <li>bacteria</li>
+            <li>baggage</li>
+            <li>balance</li>
+            <li>banana</li>
+            <li>blue</li>
+            <li>background</li>
+            <li>backward</li>
+            <li>bacon</li>
+            <li>bacteria</li>
+            <li>baggage</li>
+            <li>balance</li>
+            <li>banana</li>
+            <li>blue</li>
+            <li>background</li>
+            <li>backward</li>
+            <li>bacon</li>
+            <li>bacteria</li>
+            <li>baggage</li>
+            <li>balance</li>
+        </ul>
+    </dd>
+    <dt>C</dt>
+    <dd>
+        <ul>
+            <li>banana</li>
+            <li>blue</li>
+            <li>background</li>
+            <li>backward</li>
+            <li>bacon</li>
+            <li>bacteria</li>
+            <li>baggage</li>
+            <li>balance</li>
+            <li>banana</li>
+            <li>blue</li>
+            <li>background</li>
+            <li>backward</li>
+            <li>bacon</li>
+            <li>bacteria</li>
+            <li>baggage</li>
+            <li>balance</li>
+            <li>banana</li>
+            <li>blue</li>
+            <li>background</li>
+            <li>backward</li>
+            <li>bacon</li>
+            <li>bacteria</li>
+            <li>baggage</li>
+            <li>balance</li>
+            <li>blue</li>
+            <li>background</li>
+            <li>backward</li>
+            <li>bacon</li>
+            <li>bacteria</li>
+            <li>baggage</li>
+            <li>balance</li>
+        </ul>
+    </dd>
+</dl>
+
+  
+</body>
+
+
+</html>
