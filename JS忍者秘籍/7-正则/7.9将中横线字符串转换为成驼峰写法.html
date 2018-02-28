@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../2-测试/assert.css">
+</head>
+<body>
+<div id="results"></div>
+</body>
+</html>
+<script src="../2-测试/assert.js"></script>
+<script>
+    console.log('ABCDEfg'.replace(/[A-Z]/g, 'X'));
+    // 转换成大写函数
+    function upper(all, letter) {
+        return letter.toUpperCase();
+    }
+
+    assert('border-top-color'.replace(/-(\w)/g, upper) === 'borderTopColor', '已经变成驼峰写法')
+</script>

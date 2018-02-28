@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    /*
+    *   许多javascript库都模拟了类的概念，并引进了一些语法糖
+    *   这些库中类的实现方式各有不同，但是往往都有一些共性，其中都包括了以下内容
+    *       1.有命名类方法的公约，类的构造函数，比如_init, 并且在创建对象时这些方法会被自动调用
+    *       2.存在从其他类所继承的类
+    *       3.在子类中可以访问父类或超类
+    * */
+
+
+    // 实现klass函数
+    var klass = function (Parent, props) {
+        var Child, F, i;
+
+        //1 新构造函数
+        Child = function () {
+            if (Child.uber && Child.uber.hasOwnProperty('__construct')) {
+                Child.uber.__construct.apply(this, arguments);
+            }
+            if (Child.prototype.hasOwnProperty('__construct')) {
+                Child.prototype.__construct.apply(this, arguments);
+            }
+        };
+
+        //2 继承
+        Parent = Parent || Object;
+        F = function() {};
+        F.prototype = Parent.prototype;
+        Child.prototype = new F();
+        Child.uber = Parent.prototype;
+        Child.prototype.constructor = Child;
+
+        //3 添加实现方法
+        for (i in props) {
+            if (props.hasOwnProperty(i)) {
+                Child.prototype[i] = props[i];
+            }
+        }
+
+        // 返回该'class'
+        return Child;
+    };
+
+
+
+
+    var Man = klass(null, {
+       __construct(what) {
+           console.log("Man's constructor");
+           this.name = what;
+       },
+       getName() {
+           return this.name;
+       }
+    });
+
+    // 创建实例
+    var first = new Man('Adam');
+    console.log(first.getName());
+
+    // 扩充该类并创建一个SuperMan类
+    var SuperMan = klass(Man, {
+        __construct(what) {
+            console.log("Superman's constructor");
+        },
+        getName() {
+            var name = SuperMan.uber.getName.call(this);
+            return `I am ${name}`;
+        }
+    });
+
+    var clark = new SuperMan('Clark Kent');
+    console.log(clark.getName());
+    console.log(clark.getName());
+
+
+</script>
+</body>
+</html>

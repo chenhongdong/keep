@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {margin: 0; padding: 0;}
+        #box {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 1px solid #000;
+            line-height: 100px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="box">Hello!</div>
+</body>
+</html>
+<script>
+    var time = {
+        timerID: null,
+        timers: [],
+
+        add: function (fn) {
+            this.timers.push(fn);
+        },
+
+        start: function () {
+            if (this.timerID) return;
+            (function runNext() {
+                if (time.timers.length > 0) {
+                    for (var i = 0; i < time.timers.length; i++) {
+                        if (time.timers[i]() === false) {
+                            time.timers.splice(i, 1);
+                            i--;
+                        }
+                    }
+                    time.timerID = setTimeout(runNext, 0);
+                }
+            })();
+        },
+
+        stop: function () {
+            clearTimeout(this.timerID);
+            this.timerID = null;
+        }
+    };
+
+    var box = document.getElementById('box'),
+        x = 0,
+        y = 20,
+        z = 10;
+
+    time.add(function () {
+        box.style.left = x + 'px';
+        if (++x > 150) return false;
+    });
+
+    time.add(function () {
+        box.style.top = y + 'px';
+        y += 2;
+        if (y > 120) return false;
+    });
+
+    time.add(function () {
+        box.style.width = z + 'px';
+        z += 3;
+        if (z > 200) return false;
+    });
+
+    time.start();
+</script>

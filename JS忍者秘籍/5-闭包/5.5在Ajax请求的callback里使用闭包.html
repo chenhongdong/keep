@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="../2-测试/assert.css">
+</head>
+<body>
+<div id="testSubject"></div>
+
+<button id="testBtn">Go!</button>
+
+<div id="results"></div>
+<a href="5.2不那么简单的闭包.html">链接</a>
+</body>
+</html>
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="../2-测试/assert.js"></script>
+<script>
+    $('#testBtn').click(function () {
+        var $ele = $('#testSubject');
+        
+        $ele.html('Loading...');
+        
+        $.ajax({
+            url: 'test.html',
+            success: function (html) {
+                assert($ele, '我们能通过回调看到这个ele元素');
+                $ele.html(html);
+            }
+        });
+    });
+
+
+
+</script>

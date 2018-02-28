@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    // 避免全局变量污染
+    // 1.使用命名空间
+    var namespace = {
+        a: function () {
+            alert(1);
+        },
+        b: function () {
+            alert(2);
+        }
+    };
+    // 还可以动态创建命名空间
+    var App = {};
+    App.namespcae = function (name) {
+        var parts = name.split('.');
+        var current = App;
+        for (var i in parts) {
+            if (!current[ parts[i] ]) {
+                current[ parts[i] ] = {};
+            }
+            current = current[ parts[i] ];
+        }
+    };
+
+    App.namespcae('event');
+    App.namespcae('dom.style');
+
+    console.dir( App );
+
+    // 2.使用闭包封装私有变量
+    var user = (function () {
+        var __name = 'sven',
+            __age = 29;
+
+        return {
+            getUserInfo: function () {
+                return __name + '-' + __age;
+            }
+        }
+    })();
+    // 用下划线来约定私有变量,封装在闭包产生的作用域中,外部访问不到
+    console.log(user.__name);   // undefined
+    console.log(user.getUserInfo());
+</script>

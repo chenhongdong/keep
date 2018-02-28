@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<ul>
+	<li>1</li>
+	<li>2</li>
+	<li>3</li>
+</ul>
+</body>
+</html>
+<script>
+	var oUl = document.querySelector('ul');
+
+	oUl.onclick = function(e) {
+		var e = e || event;
+		console.log(e.target);
+		console.log(e.currentTarget);
+	};
+
+	// 私有成员
+	function Gadget() {
+		var name = 'iPad';
+		var obj = {
+			name: 'iPhone',
+			company: 'Apple'
+		};
+		// 特权方法就是可以访问私有成员的公共方法的名称
+		this.getName = function() {
+			return name;
+		};
+
+		this.getObj = function() {
+			return obj;	//私有性会失效
+
+			// 解决
+			return {
+				music: '樱桃小丸子',
+				year: 1974
+			};
+		};
+	}
+
+	// 私有性失效的情况
+	// 特权方法在返回一个数组或对象的时候，外面的代码仍然可以访问该私有对象，因为是通过引用传递的原因
+	// 防止失效的方法，就是直接返回一个新对象，而不是数组或对象的引用
+	var toy = new Gadget(),
+		obj = toy.getObj();
+
+	obj.name = '大肚腩';
+	obj.company = '虾米音乐';
+	obj.time = 2017;
+	obj.color = 'orange';
+
+	console.log(toy.name);
+	console.log(toy.getName());
+
+	console.log(toy.getObj());
+</script>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    (function() {
+        var nextGuid = 1;
+
+        this.addEvent = function (ele, type, fn) {
+            // 获取相关的数据块
+            var data = getData(ele);
+            //创建处理程序存储
+            if (!data.handlers) data.handlers = {};
+            // 使用type创建该type对应的数组
+            if (!data.handlers[type])
+                data.handlers[type] = [];
+            // 标记函数
+            if (!fn.guid) fn.guid = nextGuid++;
+            //将处理程序添加到列表中   
+            data.handlers[type].push(fn);
+            // 创建事件调度器
+            if (!data.dispatcher) {
+                data.disabled = false;
+                data.dispatcher = function (event) {
+                    if (data.disabled) return;
+                    event = fixEvent(event);
+                    // 调用注册的处理程序
+                    var handlers = data.handlers[event.type];
+                    if (handlers) {
+                        for (var i = 0; i < handlers.length; i++) {
+                            handlers[i].call(ele, event);
+                        }
+                    }
+                }
+            }
+
+            if (data.handlers[type].length == 1) {
+                // 注册调度器
+                if (document.addEventListener) {
+                    ele.addEventListener(type, data.dispatcher, false);
+                } else if (document.attachEvent) {
+                    ele.attachEvent('on' + type, data.dispatcher);
+                }
+            }
+        }
+    })();
+</script>

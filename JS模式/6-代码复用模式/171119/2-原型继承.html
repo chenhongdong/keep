@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    // 原型继承： 对象都是继承其他对象，不需要new
+    // 要继承的对象
+    var parent = {
+        name: 'papa'
+    };
+    
+    // 新对象
+    var child = object(parent);
+    
+    console.log(child.name);    // 'papa'
+
+    function object(parent) {
+        function F() {}
+        F.prototype = parent;
+        return new F();
+    }
+    
+    
+    // 可以选择仅继承构造函数的原型对象
+    
+    // 父构造函数
+    function Person() {
+        this.name = 'Adam';
+    }
+    
+    Person.prototype.getName = function () {
+        return this.name;
+    };
+    
+    // 继承原型对象
+    var kid = object(Person.prototype);
+    //测试
+    console.log(typeof kid.getName);    //'function',因为存在原型中继承
+    console.log(typeof kid.name);       //'undefined',不存在原型中没有继承
+    
+    
+    // 原型继承已经被加入到ES5中 ****
+    /*
+    * Object.create()接受一个额外的对象，即一个对象
+    * */
+    var me = Object.create(parent);
+    console.log(me.name);   // 'papa'
+    var he = Object.create(parent, {
+        age: {value: 23}
+    });
+    console.log(he.hasOwnProperty('name')); // false
+    console.log(he.hasOwnProperty('age'));  // true
+</script>
+</body>
+</html>

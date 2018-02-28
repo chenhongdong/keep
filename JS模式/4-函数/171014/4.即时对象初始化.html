@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>函数2</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    // 即时对象初始化
+    ({
+        // 配置常数
+        maxWidth: 600,
+        maxHeight: 400,
+        // 还可以定义一些实用的方法
+        gimmeMax: function () {
+            return this.maxWidth + 'x' + this.maxHeight;
+        },
+        // 初始化
+        init: function () {
+            console.log(this.gimmeMax());
+            // 更多初始化任务...
+        }
+    }).init();
+
+    // 初始化时分支   对该条件测试一次就够，浏览器嗅探
+    // 接口
+    let utils = {
+        addListener: null,
+        removeListener: null
+    };
+    // 实现
+    if (typeof window.addEventListener === 'function') {    // normal
+        utils.addListener = function (el, type, fn) {
+            el.addEventListener(type, fn, false);
+        };
+        utils.removeListener = function (el, type, fn) {
+            el.removeEventListener(type, fn, false);
+        };
+    } else if (typeof window.attachEvent === 'function') {  // IE
+        utils.addListener = function (el, type, fn) {
+            el.attachEvent('on' + type, function () {
+                return fn.call(el);
+            });
+        };
+        utils.removeListener = function (el, type, fn) {
+            el.detachEvent('on' + type, function () {
+                return fn.call(el);
+            });
+        };
+    } else {    // old
+        utils.addListener = function (el, type, fn) {
+            el['on' + type] = fn;
+        };
+        utils.removeListener = function (el, type, fn) {
+            el['on' + type] = null;
+        };
+    }
+</script>

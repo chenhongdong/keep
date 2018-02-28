@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>函数</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    // 返回函数
+    let setup = function () {
+        let num = 0;
+        return function () {
+            return num++;
+        }
+    };
+    
+    let next = setup();
+    next(); // 1
+    next(); // 2
+    next(); // 3
+
+//    自定义函数
+    let scareMe = function () {
+        alert('Boo!');
+        scareMe = function () {
+            alert('Double boo!');
+        }
+    }
+//    scareMe();  //Boo!
+//    scareMe();  //Double boo!
+    /*
+    * 缺点：
+    *   当重定义自身时已经添加到原始函数的任何属性都会丢失
+    * */
+
+    // 1 添加一个新的属性
+    scareMe.property = '属性';
+    // 2 赋值给另一个不同名的变量
+    let prank = scareMe;
+    // 3 作为一个方法使用
+    let spooky = {
+        boo: scareMe
+    }
+    
+    // 调用新变量
+//    prank();    // Boo!
+//    prank();    // Boo!
+    console.log(prank.property);    // 属性
+    
+    // 作为一个方法来调用
+//    spooky.boo();   // Boo!
+//    spooky.boo();   // Boo!
+    console.log(spooky.boo.property);   // 属性
+    
+    // 使用自定义函数
+//    scareMe();  // Double boo!
+//    scareMe();  // Double boo!
+    console.log(scareMe.property);  // undefined
+
+//  即时函数
+    (function (global) {
+        console.log(global);
+        let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            today = new Date(),
+            msg = `Today is ${days[today.getDay()]}, ${today.getDate()}`;
+        
+        console.log(msg);
+    }(this));
+    
+    // 即时函数返回值
+    let result = (function () {
+        return 2 + 3;
+    })();
+    console.log(result);
+    // 返回函数
+    let getResult = (function () {
+        let sum = 3 + 4;
+        return function () {
+            return sum;
+        }
+    }());
+    console.log(getResult());
+
+    // 对象属性使用即时函数
+    let obj = {
+        msg: (function () {
+            let who = 'me',
+                what = 'call';
+            return what + ' ' + who;
+        }()),
+        getMsg() {
+            return this.msg;
+        }
+    }
+
+    console.log(obj.getMsg());
+    console.log(obj.msg);
+</script>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../2-测试/assert.css">
+</head>
+<body>
+<div id="results"></div>
+</body>
+</html>
+<script src="../2-测试/assert.js"></script>
+<script>
+    var pattern = /((?:ninja-)+)sword/;
+
+    var ninjas = 'ninja-ninja-sword'.match(pattern);
+    
+    console.log(ninjas);
+
+    assert(ninjas.length == 2, '只有一个捕获被返回');
+    assert(ninjas[1] == 'ninja-ninja-', '匹配两个词,没有多余的捕获');
+</script>

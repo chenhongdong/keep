@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>this的指向</title>
+</head>
+<body>
+	<script type="text/javascript">
+		// 1
+		var My= function() {
+			this.name = 'seven';
+		};
+		var obj = new My();
+		console.log(obj.name);	// 'seven'     
+
+		// 2  
+		// 要是构造器返回了一个object对象，this -> object
+		var Class = function() {
+			this.name = '七月';
+			return {
+				name: '安生'
+			};
+		};
+
+		var obj2 = new Class();
+		console.log(obj2.name);
+
+		// 3
+		// 构造器不返回对象
+		var MyClass = function() {
+			this.name = '超人';
+			return '大战蝙蝠侠';
+		};
+
+		var obj3 = new MyClass();
+		console.log(obj3.name);
+	</script>
+</body>
+</html>

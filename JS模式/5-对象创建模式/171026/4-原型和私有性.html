@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    /*
+    *   当将私有成员与构造函数一起使用时，其中一个缺点每次调用构造函数，私有成员都会重新创建。
+    *   构造函数中添加到this上的任何成员都有上述问题
+    *       为了避免复制工作以及节省内存
+    *       可以将常用的属性和方法放到构造函数的prototype属性上
+    *       这样通过同一个构造函数创建的多个实例可以共享常见的部分数据
+    *           此外，还可以在多个实例中共享隐藏的私有成员
+    *           实现这一点，可以用两个模式的组合
+    *           构造函数的私有属性和对象字面量中的私有属性
+    *           由于prototype属性仅是一个对象，所有可以使用对象字面量创建该对象
+    * */
+    function Gadget() {
+        // 私有成员
+        let name = 'iPad';
+        // 公有方法
+        this.getName = function() {
+            return name;
+        }
+    }
+
+    Gadget.prototype = (function () {
+        // 私有成员
+        let browser = 'Chrome';
+        // 公有原型成员
+        return {
+            getBrowser() {
+                return browser;
+            }
+        }
+    }());
+
+    let g1 = new Gadget();
+    let g2 = new Gadget();
+
+    console.log(g1.getName() === g2.getName());
+    console.log(g1.getBrowser() === g2.getBrowser());
+</script>

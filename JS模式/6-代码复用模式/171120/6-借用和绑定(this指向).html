@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		// 例子
+		// one对象且具有say方法
+		var one = {
+			name: 'object',
+			say(greet) {
+				return greet + ', ' + this.name;
+			}
+		};
+		// 测试
+		one.say('hi');	// hi, object
+
+
+		var two = {
+			name: 'another object'
+		};
+		one.say.apply(two, ['hello']);	// hello, another object
+
+
+		// 1.给变量赋值, this将指向全局变量
+		var say = one.say;
+		console.log(say('hoho'));	// hoho, 
+
+		// 2.作为回调函数传递
+		var yetanother = {
+			name: 'Yet another object',
+			method(cb) {
+				return cb('Hola');
+			}
+		};
+
+		yetanother.method(one.say);	// Hola, 
+		/*
+			以上两种情况下，say()方法内部的this指向了全局变量window，并且整个代码段都无法按照预期正常运行
+			为了修复对象与方法间的关系，可以使用bind(obj, fn)
+		*/
+
+		function bind(o, fn) {
+			return function () {
+				return fn.apply(o, [].slice.call(arguments));
+			};
+		}
+		// 测试
+		var twosay  = bind(two, one.say);
+		console.log(twosay('yo'))
+	</script>
+</body>
+</html>

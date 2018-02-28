@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div id="clickme">Click me: 0</div>
+</body>
+</html>
+<script>
+	var b = document.getElementById('clickme');
+	if (document.addEventListener) {
+		b.addEventListener('click', myHandler, false);
+	} else if (document.attachEvent) {
+		b.attachEvent('onclick', myHandler);
+	} else {
+		b.onclick = myHandler;
+	}
+
+	function myHandler(e) {
+		var src, parts;
+
+		// 获取事件和源元素
+		e = e || event;
+		src = e.target || e.srcElement;
+
+		// 实际工作：升级标签
+		parts = src.innerHTML.split(': ');
+		parts[1] = parseInt(parts[1], 10) + 1;
+		src.innerHTML = parts[0] + ': ' + parts[1];
+
+		// 无冒泡
+		if (typeof e.stopPropagation === 'function') {
+			e.stopPropagation();
+		}
+		if (typeof e.cancelBubble !== 'undefined') {
+			e.cancelBubble = true;
+		}
+
+		// 阻止默认操作
+		if (typeof e.preventDefault === 'function') {
+			e.preventDefault();
+		}
+		if (typeof e.returnValue !== 'undefined') {
+			e.returnValue = false;
+		}
+	}
+</script>

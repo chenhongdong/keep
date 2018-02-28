@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    // 原型链的工作流程
+
+    // 父构造函数
+    function Parent(name) {
+        this.name = name || 'Adam';
+    }
+
+    // 向该原型添加功能
+    Parent.prototype.say = function () {
+        return this.name;
+    };
+    
+    // 子构造函数
+    function Child(name) {
+        Parent.apply(this, arguments);
+    }
+    
+    var kid = new Child('Beckham');
+    kid.name;
+    console.log(typeof kid.say);    // 'undefined'
+
+
+
+    // 通过借用构造函数实现多重继承
+    function Cat() {
+        this.legs = 4;
+        this.say = function () {
+            return 'miao';
+        }
+    }
+    function Bird() {
+        this.wings = 2;
+        this.fly = true;
+    }
+    // 继承这两个
+    function CatBirds() {
+        Cat.call(this);
+        Bird.call(this);
+    }
+
+    var jane = new CatBirds();
+    console.dir(jane);
+
+    // 缺点：  无法从原型中继承任何东西，并不会为每个实例重新创建原型
+
+    // 优点：  可以获得父对象自身成员的真实副本，独立
+
+
+
+</script>

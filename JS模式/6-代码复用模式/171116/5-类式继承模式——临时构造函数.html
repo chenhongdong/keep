@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    // 空白函数F()，充当子对象与父对象之间的代理
+    // F()的prototype指向父对象的原型
+    // 子对象的原型则指向一个空白函数实例
+    function inherit(C, P) {
+        var F = function() {};
+        F.prototype = P.prototype;
+        C.prototype = new F();
+    }
+    
+    // 这种模式下，父构造函数添加到this中的属性都不会被继承
+
+    // 父构造函数
+    function Parent(name) {
+        this.name = name || 'Adam';
+    }
+    Parent.prototype.say = function () {
+        return this.name;
+    };
+    // 子构造函数
+    function Child(name) {}
+
+    inherit(Child, Parent);
+    
+    var kid = new Child();
+    console.log(kid.name);
+
+    // 优化inherit函数
+    // 避免在每次需要继承时都创建临时构造函数，使用即时函数和闭包
+    var inherit = (function() {
+        var F = function (){};
+        return function(C, P) {
+            F.prototype = P.prototype;
+            C.prototype = new F();
+            C.uber = P.prototype;   // 存储超类
+            C.prototype.constructor = C;
+        }
+    }());
+</script>
+</body>
+</html>

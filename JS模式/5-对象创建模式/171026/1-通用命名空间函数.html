@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    var MYAPP = MYAPP || {};
+
+    MYAPP.namespace = function (string) {
+        var parts = string.split('.'),
+            parent = MYAPP;
+    
+        if (parts[0] === 'MYAPP') {
+            parts = parts.slice(1);
+        }
+        
+        console.log(parts);
+        for (var i = 0; i < parts.length; i++) {
+            if (typeof parent[parts[i]] === 'undefined') {
+                parent[parts[i]] = {};
+            }
+            parent = parent[parts[i]];
+        }
+    console.log(parent);
+        return parent;
+    };
+
+    var module = MYAPP.namespace('MYAPP.module1.name');
+    MYAPP.namespace('app.version');
+    MYAPP.namespace('one.two.three.four.five.six.seven.eight.nine.ten');
+
+
+    // 私有属性和方法
+    // javascript中没有私有，保护和公共属性和方法的特殊语法
+    // 所有的对象成员都是共有的
+    var obj = {
+        myprop: 1,
+        getProp: function () {
+            return this.myprop;
+        }
+    };
+
+    console.log(obj.myprop);
+    console.log(obj.getProp());
+
+    function Gadget() {
+        this.name = 'iPad';
+        this.buy = function () {
+            return 'iPhone x';
+        };
+    }
+    
+    let g1 = new Gadget();
+    console.log(g1.name);
+    console.log(g1.buy());
+
+
+
+    function test(chd) {
+        var a = b = 5;
+        var chd = 'you are so good';
+        console.log(chd);
+        alert(global);
+    }
+    test('hello');
+    
+    var global = 'sunshine';
+//    alert(chd);     //chd未定义
+//    console.log(a); //取不到局部变量a
+//    console.log(b);
+</script>

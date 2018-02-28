@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>通用的惰性单例</title>
+</head>
+<body>
+<button id="loginBtn">登录</button>
+<button id="iframeBtn">创建iframe</button>
+<button id="loadBtn">加载数据</button>
+</body>
+</html>
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script>
+    /*
+    * 将管理单例的逻辑抽离出来
+    * 逻辑封装到getSingle
+    * */
+    let doc = document,
+        bd = doc.body;
+
+    let getSingle = function (fn) {
+        var result;
+        return function () {
+            return result || (result = fn.apply(this, arguments))
+        }
+    };
+
+    let createLoginLayer = function () {
+        let div = doc.createElement('div');
+        div.innerHTML = '我是登录浮窗';
+        div.style.display = 'none';
+        bd.appendChild(div);
+        return div;
+    };
+
+    // 创建单例的实例
+    let createSingleLogin = getSingle(createLoginLayer);
+
+    doc.querySelector('#loginBtn').onclick = function () {
+        let loginLayer = createSingleLogin();
+        loginLayer.style.display = 'block';
+    };
+
+
+    // 再创建唯一的iframe用于动态加载第三方页面
+    let createSingleIframe = getSingle(function () {
+        let iframe = doc.createElement('iframe');
+        bd.appendChild(iframe);
+        return iframe;
+    });
+    doc.querySelector('#iframeBtn').onclick = function () {
+        let iframeLayer = createSingleIframe();
+        iframeLayer.src = 'http://www.so.com';
+    };
+
+
+
+    // 只绑定一个事件
+    let bindEvent = getSingle(function () {
+        doc.querySelector('#loadBtn').onclick = function () {
+            alert('加载');
+        };
+        return true;
+
+        /*$('#loadBtn').one('click', function () {
+            alert('click');
+        });*/
+    });
+
+    let render = function () {
+        console.log('开始渲染列表');
+        bindEvent();
+    };
+
+    render();
+    render();
+    render();
+</script>

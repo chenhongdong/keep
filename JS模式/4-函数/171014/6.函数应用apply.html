@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    let sayHi = function (who) {
+        return `Hello ${who ? who : ''}!`;
+    };
+    console.log(sayHi());
+    console.log(sayHi('世界'));
+    
+    // 应用函数
+    console.log(sayHi.apply(null, ['杰克船长']));
+    // 当apply第一个参数为null时，this指向为window
+    // 第二个参数为一个数组，数组里的参数类似于函数内部的arguments参数集合
+    
+//    当函数是一个对象的方法时，第一个参数不能传递null引用，将该对象作为第一个参数
+    let alien = {
+        sayHi:function (who) {
+            return `你好，${who ? who : ''}!`;
+        }
+    };
+    console.log(alien.sayHi('明天'));
+    console.log(sayHi.apply(alien, ['昨日重现']));
+
+    // 如果参数仅有一个时，用call代替apply效率更高，节省了一个数组
+    console.log(sayHi.apply(alien, ['芝麻官']));
+    console.log(sayHi.call(alien, '九品'));
+</script>

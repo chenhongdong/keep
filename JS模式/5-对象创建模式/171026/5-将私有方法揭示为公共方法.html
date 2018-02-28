@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    let myarray;
+
+    (function () {
+        let aStr = '[object Array]',
+            toString = Object.prototype.toString;
+
+        function isArray(obj) {
+            return toString.call(obj) === aStr;
+        }
+
+        function indexOf(has, target) {
+            let i = 0,
+                len = has.length;
+
+            for (; i < len; i++) {
+                if (has[i] === target) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        myarray = {
+            isArray,
+            indexOf
+        };
+    }());
+
+
+</script>

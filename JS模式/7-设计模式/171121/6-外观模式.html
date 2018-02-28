@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+	/*
+		外观模式是一种简单的模式
+		它为对象提供了一个可供选择的接口
+	*/
+
+	// 如处理浏览器事件时
+	// 创建一个外观方法从而同时调用多个方法
+	/*let myevent = {
+		// ...
+		stop(e) {
+			e.stopPropagation();
+			e.preventDefault();
+		},
+		// ...
+	};*/
+
+	// 可以添加代码来处理ie事件
+	let myevent = {
+		// ...
+		stop(e) {
+			// 其他
+			if (typeof e.stopPropagation === 'function') {
+				e.stopPropagation();
+			}
+			if (typeof e.preventDefault === 'function') {
+				e.preventDefault();
+			}
+
+			// IE
+			if (typeof e.returnValue === 'boolean') {
+				e.returnValue = false;
+			}
+			if (typeof e.cancelBubble === 'boolean') {
+				e.cancelBubble = true;
+			}
+		},	
+		// ...
+	}
+
+	// 外观模式对于重新设计和重构的工作也很有帮助
+</script>

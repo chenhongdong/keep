@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>又名-自定义事件</title>
+</head>
+<body>
+	<script>
+		/*
+			观察者模式非常常见（鼠标悬停，按键等事件）是该模式的例子
+			又名: 自定义事件
+		*/
+		// 示例#1： 杂志订阅
+		/*
+			发布者对象paper需要具有以下这些成员
+			subscribers
+				一个数组
+			subscribe()
+				将订阅者添加到subscribers数组
+			unsubscribe()
+				从订阅者数组subscribers中删除订阅者
+			publish()
+				循环遍历subscribers中的每个元素，并且调用他们注册时所提供的方法
+
+			上述三种方法都需要一个type参数
+		*/
+		// 直接上代码
+		let publisher = {
+			subscribers: {
+				any: []	// 事件类型：订阅者
+			},
+			subscribe(fn, type) {
+				type = type || 'any';
+				if (typeof this.subscribers[type] === 'undefined') {
+					this.subscribers[type] = [];
+				}
+				this.subscribers[type].push(fn);
+			},
+			unsubscribe(fn, type) {
+				this.visitSubscribers('unsubscribe', fn, type);
+			},
+			publish(publication, type) {
+				this.visitSubscribers('publish', publication, type);
+			},
+			visitSubscribers(action, arg, type) {
+				let pubtype = type || 'any',
+					subscribers = this.subscribers[pubtype],
+					i,
+					max = subscribers.length;
+
+				for (i = 0; i < max; i++) {
+					if (action === 'publish') {
+						subscribers[i](arg);
+					} else {
+						if (subscribers[i] === arg) {
+							subscribers.splice(i, 1);
+						}
+					}
+				}
+			}
+		};
+
+
+		// 转成发布者
+		function makePublisher(o) {
+			let i;
+			for (i in publisher) {
+				if (publisher.hasOwnProperty(i) && typeof publisher[i] === 'function') {
+					o[i] = publisher[i];
+				}
+			}
+			o.subscribers = {any: []};
+		}
+
+		// 发布者paper
+		// 实现paper对象，它所能做的就是发布日报和月报
+		let paper = {
+			daily() {
+				this.publish('今日头条');
+			},
+			monthly() {
+				this.publish('月月有喜讯', 'monthly');
+			}
+		};
+		// 将paper构造成一个发布者
+		makePublisher(paper);
+
+		// 订阅者joe
+		// 实现joe对象，该对象有两个方法
+		let joe = {
+			drinkCoffee(paper) {
+				console.log('正则读 ' + paper);
+			},
+			sundayPreNap(monthly) {
+				console.log('即将入睡 ' + monthly);
+			}
+		};
+
+		// paper注册joe
+		paper.subscribe(joe.drinkCoffee);
+		paper.subscribe(joe.sundayPreNap, 'monthly');
+
+		// 触发事件
+		paper.daily();
+		paper.daily();
+		paper.daily();
+		paper.monthly();
+
+
+
+
+
+
+		// 将joe转换为发布者
+		makePublisher(joe);
+		joe.tweet = function(msg) {
+			this.publish(msg);
+		};
+
+		// paper读取joe发布的tweet消息
+		paper.readTweet = function(tweet) {
+			console.log('joe发布的最新的内容是 ' + tweet);
+		};
+
+		// joe注册paper
+		joe.subscribe(paper.readTweet);
+
+		joe.tweet('白小白：最美情侣');
+	</script>
+</body>
+</html>

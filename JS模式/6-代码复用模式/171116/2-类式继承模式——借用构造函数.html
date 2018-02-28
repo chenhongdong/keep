@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    // 本模式解决了：从子构造函数到父构造函数的参数传递问题
+
+    // 父构造函数
+    function Parent(name) {
+        this.name = name || 'Adam';
+    }
+
+    // 子构造函数
+    function Child(a, c, b, d) {
+        // 此方式可以继承构造函数中this上的属性
+        // 不会继承构造函数中原型上的属性
+        Parent.apply(this, arguments);
+    }
+
+    // 第一种和第二种的区别
+    // 父构造函数
+    function Article() {
+        this.tags = ['js', 'css'];
+    }
+    var article = new Article();
+    // blog文章对象继承了article
+    function Blog() {}
+    // 原型链继承
+    Blog.prototype = article;   // 不需要new，因为article已经是一个实例
+    var blog = new Blog();
+    // static page继承了article
+    // 通过借用构造函数继承
+    function StaticPage() {
+        Article.call(this);
+    }
+    var page = new StaticPage();
+    
+    console.log(article.hasOwnProperty('tags'));    // true
+    console.log(blog.hasOwnProperty('tags'));       // false
+    console.log(page.hasOwnProperty('tags'));       // true
+
+    // blog.tags和article.tags指向了同一个数组，修改会相互影响
+    blog.tags.push('html');
+    article.tags.shift();
+
+    // 在继承过程中page.tags是独立创建的一个副本
+    page.tags.push('php');
+
+    alert(article.tags.join(', '));
+    alert(blog.tags)
+
+
+
+</script>

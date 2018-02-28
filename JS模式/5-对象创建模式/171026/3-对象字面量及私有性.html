@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+	let myobj;	// 这将会是对象
+	// 自执行函数闭包
+	(function() {
+		let name = 'oh my god';
+
+		// 实现公有部分
+		myobj = {
+			// 特权方法，调用私有成员
+			getName() {
+				return name;
+			}
+		}
+	}());
+
+	myobj.getName();
+	console.log(myobj.getName());
+
+	// 同样的思想，不同的实现
+    let obj = (function () {
+        let num = 123;
+
+        return {
+            getNum() {
+                return num;
+            }
+        }
+    }());
+    
+    console.log(obj.getNum());
+</script>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>公有静态成员</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+	// 例1：
+	// 构造函数
+	var Gadget = function() {};
+
+	// 静态方法	
+	Gadget.isShiny = function() {
+		console.log(this);
+		return 'you bet';
+	};
+
+	// 向该原型添加一个普通方法
+	Gadget.prototype.setPrice = function(price) {
+		this.price = price;
+	};
+
+	/*
+		构造函数中的静态方法可以直接调用
+		普通方法则需要一个实例
+	*/
+	// 调用静态方法
+	// Gadget.isShiny();
+
+	// 创建一个实例并调用其方法
+	/*var iphone = new Gadget();
+	iphone.setPrice(500);*/
+
+	// 静态方法和普通方法之前相互调用是无法执行的
+
+	// 不过，可以很方便地使静态方法与实例一起工作
+	/*
+		向原型添加一个方法，其中新方法作为一个指向静态方法的外壳，
+		如下
+	*/
+	Gadget.prototype.isShiny = Gadget.isShiny;
+	// iphone.isShiny();
+
+
+
+
+
+	// 例2：
+	/*
+		如何以静态或非静态方式调用同一个方法
+		在这两种场景下依赖于调用模式的不同，表现行为略有不同
+	*/
+	// 构造函数
+	var Unique = function(price) {
+		this.price = price;
+	};
+	// 静态方法
+	Unique.isShiny = function() {
+		// 这种方法总是可以运行
+		var msg = 'you bet';
+
+		if (this instanceof Unique) {
+			// instanceof运算符有助于确定方法是如何被调用的
+			msg += `, it costs $${this.price}!`;
+		}
+		return msg;
+	};
+	// 向该原型添加一个普通方法
+	Unique.prototype.isShiny = function() {
+		return Unique.isShiny.call(this);
+	};
+
+
+	// 静态方法调用
+	Unique.isShiny();
+	// 实例，非静态方法
+	var toy = new Unique('499.99');
+	toy.isShiny();
+</script>

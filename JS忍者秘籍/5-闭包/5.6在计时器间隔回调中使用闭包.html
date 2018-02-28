@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="../2-测试/assert.css">
+    <style>
+        * {margin: 0; padding: 0;}
+        .demo {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100px;
+            height: 100px;
+            background: #0c9;
+        }
+        #box {
+            background: #c94a4a;
+        }
+    </style>
+</head>
+<body>
+    <div id="box" class="demo"></div>
+    <div id="box2" class="demo"></div>
+    <div id="results"></div>
+</body>
+</html>
+<script src="../2-测试/assert.js"></script>
+<script>
+    function animateIt(id, callback) {
+        var ele = document.getElementById(id);
+        var num = 0;
+
+        var timer = setInterval(function () {
+            if (num < 100) {
+                ele.style.left = ele.style.top = num + 'px';
+                num++;
+            } else {
+                clearInterval(timer);
+                assert(num == 100, 'num通过闭包访问到');
+                assert(ele, '元素也通过闭包访问');
+                assert(timer, '参考时间也通过闭包获得');
+
+                callback && callback();
+            }
+        }, 10);
+    }
+
+    animateIt('box', function () {
+        animateIt('box2');
+    });
+
+</script>

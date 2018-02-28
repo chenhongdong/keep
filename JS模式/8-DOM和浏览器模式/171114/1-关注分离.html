@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	
+</head>
+<body>
+	<!-- 
+		内容 html
+		表现 css
+		行为 js
+
+		相互独立
+	 -->
+	 <div id="result"></div>
+	 <br>
+	 <div id="box" style="margin: 10px; padding: 5px;"></div>
+
+
+
+	 <div id="main">
+	 	<div class="content markdown-body">
+
+            <h2 id="t0cookie">cookie <a href="#t0cookie"> # </a></h2>
+<p>HTTP1.0中协议是无状态的，但在WEB应用中，在多个请求之间共享会话是非常必要的，所以出现了Cookie<br>cookie是为了辩别用户身份，进行会话跟踪而<em>存储在客户端</em>上的数据</p>
+<h2 id="t1Cookie的处理流程">Cookie的处理流程 <a href="#t1Cookie的处理流程"> # </a></h2>
+<p><img src="http://7xjf2l.com1.z0.glb.clouddn.com/cookies.png" class="img-responsive"></p>
+<h2 id="t2使用步骤">使用步骤 <a href="#t2使用步骤"> # </a></h2>
+<ol>
+<li>客户端第一次访问服务器的时候服务器通过响应头向客户端发送Cookie,属性之间用分号空格分隔<pre><code class="lang-javascript">Set-Cookie:name=zfpx; Path=/
+</code></pre>
+</li>
+<li><p>客户端接收到Cookie之后保存在本地
+<img src="http://7xjf2l.com1.z0.glb.clouddn.com/localcookie.jpg" class="img-responsive"></p>
+</li>
+<li><p>以后客户端再请求服务器的时候会把此Cookie发送到服务器端</p>
+<pre><code class="lang-javascript">Cookie:name=zfpx
+</code></pre>
+</li>
+</ol>
+<h2 id="t3重要属性">重要属性 <a href="#t3重要属性"> # </a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">属性</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">name=value</td>
+<td style="text-align:left">键值对，可以设置要保存的 Key/Value</td>
+</tr>
+<tr>
+<td style="text-align:left">Domain</td>
+<td style="text-align:left">域名，默认是当前域名</td>
+</tr>
+<tr>
+<td style="text-align:left">maxAge</td>
+<td style="text-align:left">最大失效时间(毫秒),设置在多少后失效</td>
+</tr>
+<tr>
+<td style="text-align:left">secure</td>
+<td style="text-align:left">当 secure 值为 true 时，cookie 在 HTTP 中是无效，在 HTTPS 中才有效</td>
+</tr>
+<tr>
+<td style="text-align:left">Path</td>
+<td style="text-align:left">表示 cookie 影响到的路，如 path=/。如果路径不能匹配时，浏览器则不发送这个Cookie</td>
+</tr>
+<tr>
+<td style="text-align:left">Expires</td>
+<td style="text-align:left">过期时间(秒)，在设置的某个时间点后该 Cookie 就会失效，如 expires=Money, 05-Dec-11 11:11:11 GMT</td>
+</tr>
+<tr>
+<td style="text-align:left">httpOnly</td>
+<td style="text-align:left">如果在COOKIE中设置了<code>httpOnly</code>属性，则通过程序(JS脚本)将无法读取到COOKIE信息，防止XSS攻击产生</td>
+</tr>
+</tbody>
+</table>
+<h2 id="t4向客户端发送cookie">向客户端发送cookie <a href="#t4向客户端发送cookie"> # </a></h2>
+<h3 id="t5设置cookie">设置cookie <a href="#t5设置cookie"> # </a></h3>
+<pre><code> res.cookie(name,value,[,options]);
+</code></pre><table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">chrome对应属性</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">说明</th>
+<th style="text-align:left">示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">domain</td>
+<td style="text-align:left">Domain</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left">域名，默认是当前域名</td>
+<td style="text-align:left">{domain:'a.zfpx.cn'}</td>
+</tr>
+<tr>
+<td style="text-align:left">path</td>
+<td style="text-align:left">Path</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left">路径，默认是/</td>
+<td style="text-align:left">{path:'/visit'}</td>
+</tr>
+<tr>
+<td style="text-align:left">expires</td>
+<td style="text-align:left">Expires</td>
+<td style="text-align:left">Date</td>
+<td style="text-align:left">过期时间，如果没以有指定或为0表示当前会话有效</td>
+<td style="text-align:left">{expires:new Date(Date.now()+20*1000)}</td>
+</tr>
+<tr>
+<td style="text-align:left">maxAge</td>
+<td style="text-align:left">Max-Age</td>
+<td style="text-align:left">Number</td>
+<td style="text-align:left">有效时间(单位是毫秒)</td>
+<td style="text-align:left">{maxAge:20*1000}</td>
+</tr>
+<tr>
+<td style="text-align:left">httpOnly</td>
+<td style="text-align:left">HTTP</td>
+<td style="text-align:left">Boolean</td>
+<td style="text-align:left">不能通过浏览器javascript访问</td>
+<td style="text-align:left">{httpOnly:true}</td>
+</tr>
+<tr>
+<td style="text-align:left">secure</td>
+<td style="text-align:left">Secure</td>
+<td style="text-align:left">String</td>
+<td style="text-align:left">只通过https协议访问</td>
+</tr>
+</tbody>
+</table>
+<h2 id="t6获取cookie">获取cookie <a href="#t6获取cookie"> # </a></h2>
+<p>使用cookie-parser中间件</p>
+<pre><code class="lang-javascript">$ npm install cookie-parser --save
+</code></pre>
+<pre><code class="lang-javascript">app.use(<span class="hljs-built_in">require</span>(<span class="hljs-string">'cookie-parser'</span>)());    <span class="hljs-comment">//使用中间件</span>
+response.cookie(key,value)              <span class="hljs-comment">//在响应中向客户端设置cookie</span>
+request.cookies                         <span class="hljs-comment">//获取请求中的cookie对象</span>
+response.clearCookie(<span class="hljs-string">'username'</span>)        <span class="hljs-comment">//清除cookie</span>
+</code></pre>
+<h2 id="t7记录客户端的访问次数">记录客户端的访问次数 <a href="#t7记录客户端的访问次数"> # </a></h2>
+<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>);
+<span class="hljs-keyword">var</span> cookieParser = <span class="hljs-built_in">require</span>(<span class="hljs-string">'cookie-parser'</span>);
+<span class="hljs-keyword">var</span> app = express();
+<span class="hljs-comment">/**
+ * 如果要加密的话 cookieParser里要指定密码，而且signed要等于true
+ */</span>
+app.use(cookieParser(<span class="hljs-string">'zfpx'</span>));
+app.get(<span class="hljs-string">'/write'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req,res</span>)</span>{
+    <span class="hljs-comment">//1.普通设置</span>
+    <span class="hljs-comment">//res.cookie('name','value');</span>
+
+    <span class="hljs-comment">//2.设置域名</span>
+    <span class="hljs-comment">//res.cookie('name','zfpx',{domain:'a.zfpx.cn'});</span>
+
+    <span class="hljs-comment">//3.设置路径</span>
+    <span class="hljs-comment">//res.cookie('name','zfpx',{path:'/visit'});</span>
+
+    <span class="hljs-comment">//4.过期时间</span>
+    <span class="hljs-comment">//res.cookie('name','zfpx',{expires:new Date(Date.now()+20*1000)});//毫秒</span>
+    <span class="hljs-comment">//res.cookie('name','zfpx',{maxAge:20*1000});//过期时间 毫秒</span>
+
+    <span class="hljs-comment">//httpOnly true还是false无意义 document.cookie取不到</span>
+    <span class="hljs-comment">//res.cookie('name','zfpx',{httpOnly:true});</span>
+    res.cookie(<span class="hljs-string">'age'</span>,<span class="hljs-string">'123'</span>,{signed:<span class="hljs-literal">true</span>});
+    res.end(<span class="hljs-string">'ok'</span>);
+});
+
+app.get(<span class="hljs-string">'/read'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req,res</span>)</span>{
+    <span class="hljs-built_in">console</span>.log(req.signedCookies);
+    res.send(req.cookies);
+});
+
+<span class="hljs-comment">//记录这是客户端的第几次访问</span>
+app.get(<span class="hljs-string">'/visit'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req,res</span>)</span>{
+    res.cookie(<span class="hljs-string">'count'</span>,<span class="hljs-built_in">isNaN</span>(req.cookies.count)?<span class="hljs-number">0</span>:<span class="hljs-built_in">parseInt</span>(req.cookies.count)+<span class="hljs-number">1</span>);
+    res.send(req.cookies);
+});
+
+
+app.listen(<span class="hljs-number">9090</span>);
+</code></pre>
+<h2 id="t8cookieParser原理解析">cookieParser原理解析 <a href="#t8cookieParser原理解析"> # </a></h2>
+<pre><code class="lang-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cookieParser</span>(<span class="hljs-params">req, res, next</span>)</span>{
+    <span class="hljs-keyword">if</span> (!req.headers.cookie) {
+        <span class="hljs-keyword">return</span> next();
+    }
+    req.cookies =  <span class="hljs-built_in">require</span>(<span class="hljs-string">'querystring'</span>).parse(req.headers.cookie,<span class="hljs-string">'; '</span>,<span class="hljs-string">'='</span>);
+    res.cookie = cookie;
+    next();
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">cookie</span>(<span class="hljs-params">name, val, options</span>) </span>{
+    <span class="hljs-keyword">var</span> opt = options || {};
+
+    <span class="hljs-keyword">var</span> value = <span class="hljs-built_in">encodeURIComponent</span>(val);
+
+    <span class="hljs-keyword">var</span> pairs = [name + <span class="hljs-string">'='</span> + value];
+
+    <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> != opt.maxAge) {
+        <span class="hljs-keyword">var</span> maxAge = opt.maxAge - <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">isNaN</span>(maxAge)) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'maxAge should be a Number'</span>);
+        pairs.push(<span class="hljs-string">'Max-Age='</span> + <span class="hljs-built_in">Math</span>.floor(maxAge));
+    }
+
+    <span class="hljs-keyword">if</span> (opt.domain) {
+        pairs.push(<span class="hljs-string">'Domain='</span> + opt.domain);
+    }
+
+    <span class="hljs-keyword">if</span> (opt.path) {
+        pairs.push(<span class="hljs-string">'Path='</span> + opt.path);
+    }
+
+    <span class="hljs-keyword">if</span> (opt.expires) pairs.push(<span class="hljs-string">'Expires='</span> + opt.expires.toUTCString());
+    <span class="hljs-keyword">if</span> (opt.httpOnly) pairs.push(<span class="hljs-string">'HttpOnly'</span>);
+    <span class="hljs-keyword">if</span> (opt.secure) pairs.push(<span class="hljs-string">'Secure'</span>);
+
+    <span class="hljs-keyword">return</span> pairs.join(<span class="hljs-string">'; '</span>);
+}
+</code></pre>
+<h2 id="t9加密cookie">加密cookie <a href="#t9加密cookie"> # </a></h2>
+<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> crypto = <span class="hljs-built_in">require</span>(<span class="hljs-string">'crypto'</span>);
+<span class="hljs-keyword">var</span> sign = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">val, secret</span>)</span>{
+    <span class="hljs-keyword">return</span> val + <span class="hljs-string">'.'</span> + crypto
+            .createHmac(<span class="hljs-string">'sha256'</span>, secret)
+            .update(val)
+            .digest(<span class="hljs-string">'base64'</span>)
+            .replace(<span class="hljs-regexp">/\=+$/</span>, <span class="hljs-string">''</span>);
+};
+
+<span class="hljs-built_in">console</span>.log(sign(<span class="hljs-string">'123'</span>,<span class="hljs-string">'zfpx'</span>));
+</code></pre>
+<h2 id="t10权限控制">权限控制 <a href="#t10权限控制"> # </a></h2>
+<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>);
+<span class="hljs-keyword">var</span> cookieParser = <span class="hljs-built_in">require</span>(<span class="hljs-string">'cookie-parser'</span>);
+<span class="hljs-keyword">var</span> app = express();
+app.set(<span class="hljs-string">'view engine'</span>,<span class="hljs-string">'html'</span>);
+app.engine(<span class="hljs-string">'html'</span>,<span class="hljs-built_in">require</span>(<span class="hljs-string">'ejs'</span>).__express);
+app.set(<span class="hljs-string">'views'</span>,__dirname);
+
+app.use(cookieParser());
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkUser</span>(<span class="hljs-params">req,res,next</span>)</span>{
+    <span class="hljs-keyword">if</span>(req.cookies &amp;&amp; req.cookies.username)
+      next();
+    <span class="hljs-keyword">else</span>
+      res.redirect(<span class="hljs-string">'/'</span>);
+}
+
+<span class="hljs-comment">//进入登录页</span>
+app.get(<span class="hljs-string">'/'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req,res</span>)</span>{
+    res.render(<span class="hljs-string">'index'</span>);
+});
+
+<span class="hljs-comment">//登录</span>
+app.get(<span class="hljs-string">'/login'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req,res</span>)</span>{
+    res.cookie(<span class="hljs-string">'username'</span>,req.query.username,{httpOnly:<span class="hljs-literal">true</span>});
+    res.redirect(<span class="hljs-string">'/user'</span>);
+});
+
+<span class="hljs-comment">//用户页面</span>
+app.get(<span class="hljs-string">'/user'</span>,checkUser,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req,res</span>)</span>{
+    res.render(<span class="hljs-string">'user'</span>,{username:req.cookies.username});
+});
+
+<span class="hljs-comment">//用户退出</span>
+app.get(<span class="hljs-string">'/logout'</span>,<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req,res</span>)</span>{
+    res.clearCookie(<span class="hljs-string">'username'</span>);<span class="hljs-comment">//清除cookie</span>
+    res.redirect(<span class="hljs-string">'/'</span>);
+});
+
+
+app.listen(<span class="hljs-number">8080</span>);
+</code></pre>
+<h2 id="t11记住密码">记住密码 <a href="#t11记住密码"> # </a></h2>
+<pre><code class="lang-javascript">&lt;!DOCTYPE html&gt;
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">html</span> <span class="hljs-attribute">lang</span>=<span class="hljs-value">"en"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">meta</span> <span class="hljs-attribute">charset</span>=<span class="hljs-value">"UTF-8"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">title</span>&gt;</span>Title<span class="hljs-tag">&lt;/<span class="hljs-title">title</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">script</span>&gt;</span><span class="javascript">
+        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setCookie</span>(<span class="hljs-params">key,value</span>)</span>{
+            <span class="hljs-built_in">document</span>.cookie = key+<span class="hljs-string">"="</span>+value;
+        }
+        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getCookie</span>(<span class="hljs-params">key</span>)</span>{
+            <span class="hljs-keyword">if</span>(<span class="hljs-built_in">document</span>.cookie){
+                <span class="hljs-keyword">var</span> parts = <span class="hljs-built_in">document</span>.cookie.split(<span class="hljs-string">'; '</span>);
+                <span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>;i&lt;parts.length;i++){
+                    <span class="hljs-keyword">var</span> vals = parts[i].split(<span class="hljs-string">'='</span>);
+                    <span class="hljs-keyword">if</span>(vals[<span class="hljs-number">0</span>]==key){
+                        <span class="hljs-keyword">return</span> vals[<span class="hljs-number">1</span>];
+                    }
+                }
+                <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>;
+            }<span class="hljs-keyword">else</span>{
+                <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>;
+            }
+        }
+        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkCookie</span>(<span class="hljs-params"></span>)</span>{
+            <span class="hljs-keyword">var</span> username = getCookie(<span class="hljs-string">'username'</span>);
+            <span class="hljs-keyword">if</span>(username){
+                alert(<span class="hljs-string">'欢迎'</span>+username+<span class="hljs-string">'再次访问'</span>);
+                <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'#username'</span>).value = username;
+            }<span class="hljs-keyword">else</span>{
+                username = prompt(<span class="hljs-string">'请输入用户名:'</span>);
+                <span class="hljs-keyword">if</span>(username){
+                    setCookie(<span class="hljs-string">'username'</span>,username);
+                }
+            }
+        }
+    </span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">body</span> <span class="hljs-attribute">onLoad</span>=<span class="hljs-value">"checkCookie()"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text"</span> <span class="hljs-attribute">id</span>=<span class="hljs-value">"username"</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">html</span>&gt;</span>
+</span></code></pre>
+<h2 id="t12cookie使用注意事项">cookie使用注意事项 <a href="#t12cookie使用注意事项"> # </a></h2>
+<ul>
+<li>可能被客户端篡改，使用前验证合法性</li>
+<li>不要存储敏感数据，比如用户密码，账户余额</li>
+<li>使用httpOnly保证安全</li>
+<li>尽量减少cookie的体积</li>
+<li>设置正确的domain和path，减少数据传输</li>
+</ul>
+
+
+        </div>
+	 </div>
+</body>
+</html>
+<script>
+	// 常见的处理浏览器差异性的技术是		特性检测
+
+	// 三种检测方法
+
+	// 反模式 不好
+	if (navigator.userAgent.indexOf('MSIE') !== -1) {
+		document.attachEvent('onclick', console.log);
+	}
+
+	// 比较好的做法
+	if (document.attactEvent) {
+		document.attachEvent('onclick', console.log);
+	}
+
+	// 更具体的做法
+	if (typeof document.attactEvent !== 'undefined') {
+		document.attactEvent('onclick', console.log);
+	}
+
+
+
+	// DOM脚本
+	/*
+		DOM访问
+			DOM访问的代价是昂贵的
+
+			DOM的访问应该减少到最低，这意味着：
+				1.避免在循环中使用DOM访问
+				2.将DOM引用分配给局部变量，并使用这些局部变量
+				3.在可能的情况下使用selector API
+				4.当在HTML容器中重复使用时，缓存重复的次数
+	*/
+
+	// 反模式
+	for (var i = 0; i < 100; i++) {
+		document.getElementById('result').innerHTML += i + ' ,';
+	}
+
+
+	// 更好的方式，使用了局部变量
+	var i, content = '';
+	for (var i = 0; i < 100; i++) {
+		content += i + ' ,';
+	}
+	document.getElementById('box').innerHTML = content;
+
+	// 反模式
+	var padding = document.getElementById('box').style.padding,
+		margin = document.getElementById('box').style.margin;
+
+	// 更好的做法
+	var style = document.getElementById('box').style,
+		padding2 = style.padding,
+		margin2 = style.margin;
+
+	// IE8以后支持selector API
+	// document.querySelector('#box')更快
+
+
+
+
+	// 操作DOM
+	/*
+		更新DOM会导致浏览器重绘(review)，也经常导致重排(reflow)，会带来巨大开销
+
+		尽量减少更新DOM
+	*/
+
+	// 反模式
+	// 在创建时立即添加节点
+	var p, t;
+
+	p = document.createElement('p');
+	t = document.createTextNode('第一段');
+	p.appendChild(t);
+	document.body.appendChild(p);
+
+	p = document.createElement('p');
+	t = document.createTextNode('第二段');
+	p.appendChild(t);
+	document.body.appendChild(p);
+
+
+	// 更好的做法
+	// 创建文档碎片来离线升级节点信息
+	var span, txt, frag;
+
+	frag = document.createDocumentFragment();
+
+	span = document.createElement('span');
+	txt = document.createTextNode('这是第一句：琅琊榜 ');
+	span.appendChild(txt);
+	frag.appendChild(span);
+
+	span = document.createElement('span');
+	txt = document.createTextNode('这是第二句：欢乐颂');
+	span.appendChild(txt);
+	frag.appendChild(span);
+
+	document.body.appendChild(frag);
+
+
+
+	// 另一种更新现有DOM部分时，批处理提交修改的方法
+	var oldNode = document.querySelector('#main'),
+		clone = oldNode.cloneNode(true);	// 复制对象
+
+	console.log(oldNode);
+	console.log(clone);
+	// 处理克隆对象
+	var p = document.createElement('p');
+	p.innerHTML = '我的天，你咋不上天呢';
+	var div = document.createElement('div');
+	var txt = document.createTextNode('顶部');
+	div.appendChild(txt);
+	div.innerHTML = '<div class="back-top" style="color: pink; font-size: 30px;"><span>顶部</span></div>';
+	clone.appendChild(p);
+	clone.appendChild(div);
+
+	oldNode.parentNode.replaceChild(clone, oldNode);
+</script>

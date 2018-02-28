@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<ul>
+    <li><a href="1.html">链接1</a></li>
+    <li><a href="2.html">链接2</a></li>
+    <li><a href="3.html">链接3</a></li>
+    <li><a href="4.html">链接4</a></li>
+</ul>
+
+<div class="box"></div>
+</body>
+</html>
+<script>
+    window.onpopstate = function () {
+        console.log(history.state);
+    };
+
+    let links = document.links;
+
+    links = Array.prototype.slice.call(links);
+    
+    links.forEach( (item, i) => {
+        item.onclick = function () {
+            console.log(i);
+            history.pushState({id: i+1}, '', '');
+        }
+    });
+
+</script>

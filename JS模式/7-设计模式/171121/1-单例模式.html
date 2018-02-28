@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+	/*
+		js创建一个新对象时，实际上没有其他对象与其类似，因此已经是单体了
+		在js中，对象之间永远不会完全相等
+	*/
+	var obj = {
+		myprop: 'my value'
+	};
+
+	var obj2 = {
+		myprop: 'my value'
+	};
+	console.log(obj === obj2);	// false
+	console.log(obj == obj2);	// false
+
+	// 单例模式实现
+	var Universe;
+
+	(function() {
+
+		var instance;
+
+		Universe = function() {
+
+			if (instance) {
+				return instance;
+			}
+
+			instance = this;
+
+			// 所有功能
+			instance.start_time = 0;
+			instance.bang = 'Big';
+
+		};
+
+	}());
+
+	// 测试
+	// 向原型添加属性
+	Universe.prototype.nothing = true;
+
+	var uni = new Universe();
+	// 在创建初始化对象之后
+	// 再次向该原型添加属性
+	Universe.prototype.everything = true;
+
+	var uni2 = new Universe();
+	// 它们是相同的实例
+	console.log(uni === uni2);	// true
+	// 所有原型属性都起作用
+	console.log(uni.nothing && uni.everything && uni2.nothing && uni2.everything);	// true
+	// 正常属性也起作用
+	console.log(uni.bang);
+</script>
