@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<style>
+*{margin:0;padding: 0;}
+.box{width: 100%;padding:3%;box-sizing:border-box;overflow: hidden;}
+.box .loader{width: 30%;float: left;height: 200px;margin-right: 3%;border: 1px solid #ccc;box-sizing:border-box;display: flex;align-items:center;justify-content:center;}
+.load1{
+    width: 60px;
+    height: 60px;
+    position: relative;
+}
+.load1 i{
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #0c9;
+    position: absolute;
+    left: 0;
+    top:0;
+    opacity: 0;
+}
+
+.load1 i:nth-child(1){
+    -webkit-animation:load1 1s linear 0s infinite;
+}
+.load1 i:nth-child(2){
+    -webkit-animation:load1 1s linear 0.2s infinite;
+}
+.load1 i:nth-child(3){
+    -webkit-animation:load1 1s linear 0.4s infinite;
+}
+
+@-webkit-keyframes load1{
+    0%{-webkit-transform:scale(0);opacity: 0;}
+    50%{-webkit-transform:scale(0);opacity: 1;}
+    100%{-webkit-transform:scale(1);opacity: 0;}
+}
+
+
+.load2{
+    width: 40px;
+    height: 40px;
+    position: relative;
+}
+.load2 i{
+    display: block;
+    border:2px solid #00a1f5;
+    border-color:transparent #00a1f5;
+    position: absolute;
+    border-radius: 50%;
+}
+.load2 i:first-child{
+    width: 35px;
+    height: 35px;
+    left: 0;
+    top: 0;
+    -webkit-animation:load2 1s ease-in-out 0s infinite;
+}
+.load2 i:last-child{
+    width: 15px;
+    height: 15px;
+    left: 10px;
+    top: 10px;
+    -webkit-animation:load2 1s ease-in-out 0.5s infinite reverse;
+}
+
+@-webkit-keyframes load2{
+    0%{-webkit-transform:rotate(0deg) scale(1);}
+    50%{-webkit-transform:rotate(180deg) scale(.6);}
+    100%{-webkit-transform:rotate(360deg) scale(1);}
+}
+
+.load3{
+    width: 80px;
+    height: 20px;
+    position: relative;
+}
+.load3 i{
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #0cc;
+    margin-right: 10px;
+    position: absolute;
+}
+.load3 i:nth-of-type(1){
+    -webkit-animation:load3 2s linear 0s infinite;
+}
+.load3 i:nth-of-type(2){
+    -webkit-animation:load3 2s linear -0.4s infinite;
+}
+.load3 i:nth-of-type(3){
+    -webkit-animation:load3 2s linear -0.8s infinite;
+}
+.load3 i:nth-of-type(4){
+    -webkit-animation:load3 2s linear -1.2s infinite;
+}
+.load3 i:nth-of-type(5){
+    -webkit-animation:load3 2s linear -1.6s infinite;
+}
+
+@-webkit-keyframes load3{
+    0%{left:100px;top:0px;}
+    80%{left:0px;top:0px;}
+    85%{left:0px;top:-20px;width: 20px;height: 20px;}
+    90%{width: 40px;height: 20px;}
+    95%{left:100px;top:-20px;width: 20px;height: 20px;}
+    100%{left:100px;top:0px;}
+}
+</style>
+</head>
+<body>
+    <div class="box">
+        <div class="loader">
+            <div class="load1">
+                <i></i>
+                <i></i>
+                <i></i>
+            </div>
+        </div>
+        <div class="loader">
+            <div class="load2">
+                <i></i>
+                <i></i>
+            </div>
+        </div>
+        <div class="loader">
+            <div class="load3">
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
