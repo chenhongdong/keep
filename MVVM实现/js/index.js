@@ -4,6 +4,7 @@ function Vue(options) {
 	this.methods = options.methods;
 
 	Object.keys(this.data).forEach(function(key) {
+		console.log(key);	// title  name
 		self.proxyKeys(key);
 	});
 

@@ -14,21 +14,22 @@ Compile.prototype = {
 		} else {
 			console.log('Dom元素不存在');
 		}
-	},
+	},	
 	nodeToFragment: function(el) {
 		var fragment = document.createDocumentFragment();
-		var child = el.firstChild;
+		var child = el.firstElementChild;
 
 		while (child) {
 			// 将Dom元素移入fragment中
 			fragment.appendChild(child);
-			child = el.firstChild;
+			child = el.firstElementChild;
 		}
+
 		return fragment;
 	},
 	compileElement: function(el) {
-		var childNodes = el.childNodes;
 		var self = this;
+		var childNodes = el.childNodes;
 
 		[].slice.call(childNodes).forEach(function(node) {
 			var reg = /\{\{(.*)\}\}/;
@@ -46,13 +47,14 @@ Compile.prototype = {
 		});
 	},
 	compile: function(node) {
-		var nodeAttrs = node.attributes;
 		var self = this;
+		var nodeAttrs = node.attributes;
+
 		Array.prototype.forEach.call(nodeAttrs, function(attr) {
 			var attrName = attr.name;
 			if (self.isDirective(attrName)) {
 				var exp = attr.value;
-				var dir = attrName.substring(2);
+				var dir = attrName.substring(2);	// model  on:click
 				if (self.isEventDirective(dir)) {	// 事件命令
 					self.compileEvent(node, self.vm, exp, dir);
 				} else {	// v-model指令
@@ -80,7 +82,7 @@ Compile.prototype = {
 	},
 	compileModel: function(node, vm, exp, dir) {
 		var self = this;
-		var val = this.vm[exp];
+		var val = this.vm[exp];		// name
 		this.modelUpdater(node, val);
 
 		new Watcher(this.vm, exp, function(value) {

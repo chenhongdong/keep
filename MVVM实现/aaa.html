@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div>0101001
+		<input type="text" value="人生短短几个秋">
+		<p>回</p>
+	</div>
+	<script>
+		var oDiv = document.getElementsByTagName('div')[0];
+		var one	= oDiv.firstChild;				// 会取到元素之间的空白部分
+		var two = oDiv.firstElementChild;		// 可以取到div下面的第一个dom元素,不兼容ie6-8
+		var three = oDiv.children;				// 会取到div下面的dom元素集合，兼容ie
+
+		console.log(one);		// 0101001 
+		console.log(two);		// input元素
+		console.log(three[1]);	// p元素
+	</script>
+</body>
+</html>
+<script>
+	function foo() {
+		console.log(this.a);
+	}
+	function fn(cb) {
+		var b = 'b';
+		cb();
+	}
+
+	var a = 'a';
+
+	var obj = {
+		a: 'obj-a',
+		foo: foo
+	}
+
+	fn(obj.foo);
+</script>
+<script>
+	function Archiver() {
+		var temperature = null;
+		var archiver = [];
+
+		Object.defineProperty(this, 'temperature', {
+			get: function() {
+				console.log('get!');
+				return temperature;
+			},
+			set: function(value) {
+				temperature = value;
+				archiver.push({val: temperature});
+			}
+		});
+
+		this.getArchiver = function() { return archiver; }
+	}
+
+	var arc = new Archiver();
+	arc.temperature;
+	arc.temperature = 11;
+	arc.temperature = 13;
+	arc.temperature = '回头';
+	console.log(arc.getArchiver());
+</script>

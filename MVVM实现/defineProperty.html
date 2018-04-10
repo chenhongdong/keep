@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		#box {
+			margin: 0;
+			padding: 0;
+			width: 100px;
+			height: 100px;
+			background: blue;
+		}
+	</style>
+</head>
+<body>
+	<div id="box">1</div>
+	<div id="wrap">
+		<p>不要被这个世界改变的太多，<span id="name">facebook</span></p>
+		<div id="introduce"></div>
+	</div>
+	<script>
+		// 视图控制器
+		var userInfo = Object.create(null);		// 这样不继承prototype
+		Object.defineProperty(userInfo, 'name', {
+			get() {
+				return document.getElementById('name').textContent;
+			},
+			set(name) {
+				document.getElementById('name').textContent = name;
+			}
+		});
+
+		Object.defineProperty(userInfo, 'introduce', {
+			get() {
+				return document.getElementById('introduce').textContent;
+			},
+			set(introduce) {
+				document.getElementById('introduce').textContent = introduce;
+			}
+		});
+
+		userInfo.name = '中国合伙人';
+		console.log(userInfo.name);
+		userInfo.introduce = '阳光总在风雨后';
+	</script>
+</body>
+</html>
+<script>
+	var box = document.getElementById('box');
+
+	Object.defineProperty(box, 'translateX', {
+		set: function(value) {
+			var x = `translateX(${value}px)`;
+			box.style.webkitTransition = '1s';
+			box.style.webkitTransform = x;
+		}
+	});
+
+	box.translateX = 200;
+</script>
