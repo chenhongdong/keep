@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>源码分析</title>
+	<title>双向绑定实现</title>
 	<style>
 		#app {
 			text-align: center;
@@ -11,10 +11,10 @@
 </head>
 <body>
 	<div id="app">
-		<h2>{{title}}</h2>
+		<h2>{{title}}</h2>	
 		<input v-model="name">
 		<h1>{{name}}</h1>
-		<button @click="clickMe">点击！</button>
+		<button v-on:click="clickMe">点击！</button>
 	</div>
 </body>
 <script src="js/observer.js"></script>
@@ -24,10 +24,10 @@
 <script>
 
 	new Vue({
-		el: 'app',
+		el: '#app',
 		data: {
 			title: 'vue code',
-			name: 'imooc'
+			name: '练习'
 		},
 		methods: {
 			clickMe() {

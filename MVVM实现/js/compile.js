@@ -14,21 +14,22 @@ Compile.prototype = {
 		} else {
 			console.log('Dom元素不存在');
 		}
-	},
+	},	
 	nodeToFragment: function(el) {
 		var fragment = document.createDocumentFragment();
-		var child = el.firstChild;
+		var child = el.firstElementChild;
 
 		while (child) {
 			// 将Dom元素移入fragment中
 			fragment.appendChild(child);
-			child = el.firstChild;
+			child = el.firstElementChild;
 		}
+
 		return fragment;
 	},
 	compileElement: function(el) {
-		var childNodes = el.childNodes;
 		var self = this;
+		var childNodes = el.childNodes;
 
 		[].slice.call(childNodes).forEach(function(node) {
 			var reg = /\{\{(.*)\}\}/;
@@ -41,20 +42,21 @@ Compile.prototype = {
 			}
 
 			if (node.childNodes && node.childNodes.length) {
-				slef.compileElement(node);
+				self.compileElement(node);
 			}
 		});
 	},
 	compile: function(node) {
-		var nodeAttrs = node.attributes;
 		var self = this;
+		var nodeAttrs = node.attributes;
+
 		Array.prototype.forEach.call(nodeAttrs, function(attr) {
 			var attrName = attr.name;
 			if (self.isDirective(attrName)) {
 				var exp = attr.value;
-				var dir = attrName.substring(2);
+				var dir = attrName.substring(2);	// model  on:click
 				if (self.isEventDirective(dir)) {	// 事件命令
-					self.compileEvent(node, self.vm, exo, dir);
+					self.compileEvent(node, self.vm, exp, dir);
 				} else {	// v-model指令
 					self.compileModel(node, self.vm, exp, dir);
 				}
@@ -69,5 +71,51 @@ Compile.prototype = {
 		new Watcher(this.vm, exp, function(value) {
 			self.updateText(node, value);
 		});
+	},
+	compileEvent: function(node, vm, exp, dir) {
+		var eventType = dir.split(':')[1];
+		var cb = vm.methods && vm.methods[exp];
+
+		if (eventType && cb) {
+			node.addEventListener(eventType, cb.bind(vm), false);
+		}
+	},
+	compileModel: function(node, vm, exp, dir) {
+		var self = this;
+		var val = this.vm[exp];		// name
+		this.modelUpdater(node, val);
+
+		new Watcher(this.vm, exp, function(value) {
+			self.modelUpdater(node, value);
+		});
+
+		node.addEventListener('input', function(e) {
+			var newVal = e.target.value;
+
+			if (val === newVal) {
+				return;
+			}
+
+			self.vm[exp] = newVal;
+			val = newVal;
+		});
+	},
+	updateText: function(node, value) {
+		node.textContent = typeof value === 'undefined' ? '' : value;
+	},
+	modelUpdater: function(node, value, oldVal) {
+		node.value = typeof value === 'undefined' ? '' : value;
+	},
+	isDirective: function(attr) {
+		return attr.indexOf('v-') === 0;
+	},
+	isEventDirective: function(dir) {
+		return dir.indexOf('on:') === 0;
+	},
+	isElementNode: function(node) {
+		return node.nodeType === 1;
+	},
+	isTextNode: function(node) {
+		return node.nodeType === 3;
 	}
 };
