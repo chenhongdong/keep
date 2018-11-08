@@ -150,8 +150,7 @@ video.addEventListener('ended', () => {
     canvas.style.display = 'none';
 });
 
-// 添加弹幕
-$('#btn').addEventListener('click', () => {
+function send() {
     let time = video.currentTime;
     let value = $('#text').value;
     let color = $('#color').value;
@@ -160,4 +159,17 @@ $('#btn').addEventListener('click', () => {
 
     ws.send(JSON.stringify(obj));
     $('#text').value = '';
+}
+
+// 添加弹幕
+$('#btn').addEventListener('click', () => {
+    send();
+});
+
+
+$('#text').addEventListener('keydown', e => {
+    let code = e.keyCode;
+    if (code === 13) {
+        send();
+    }
 });
