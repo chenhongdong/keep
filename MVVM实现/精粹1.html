@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+// ES6 class 与继承
+class People {
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    getName() {
+        return this.name;
+    }
+}
+
+class English extends People {
+    constructor(name, age, lang) {
+        super(name, age);
+        this.lang = lang;
+    }
+
+    introduce() {
+        console.log('Hi, I am ' + this.getName());
+        console.log('I speak ' + this.lang);
+    }
+}
+
+let en = new English('Jack', 18, 'English');
+en.introduce();	
+// Hi, I am Jack
+// I speak English
+
+
+// 高阶函数： 是把函数当参数或者返回值是函数的函数
+// 回调函数
+[1, 2, 3, 4].forEach(function(item) {
+	console.log(item);
+});
+// 闭包：两部分组成
+// 1.函数
+// 2.环境：函数创建时作用域内的局部变量
+function makeCounter(init) {
+	var init = init || 0;
+
+	return function() {
+		return ++init;
+	}
+}
+var counter = makeCounter(10);
+console.log(counter());
+console.log(counter());
+// 惰性函数
+// bindEvent省去每次都去检测
+function bindEvent() {
+	if (window.addEventListener) {
+		return function(ele, type, fn) {
+			ele.addEventListener(type, fn, false);
+		}
+	} else {
+		return function(ele, type, fn) {
+			ele.attachEvent('on' + type, fn.bind(ele, event));
+		}
+	}
+}
+
+let addEvent = bindEvent();
+
+// 柯里化：一种允许使用部分参数生成函数的方式
+function isType(type) {
+	return function(obj) {
+		return Object.prototype.toString.call(obj) === '[object ' + type + ']';
+	}
+}
+let isNumber = isType('Number');
+console.log(isNumber(1));
+console.log(isNumber('s'));
+let isArray = isType('Array');
+console.log(isArray([1, 2, 3]));
+console.log(isArray({a:1}));
+
+function f(n) {
+	return n * n;
+}
+function g(n) {
+	return n * 2;
+}
+console.log(f(g(5)));	// 100
+// 用pipe省去多个括号调用
+function pipe(f, g) {
+	return function() {
+		return f.call(null, g.apply(null, arguments));
+	}
+}
+let fn = pipe(f, g);
+console.log(fn(5));		// 100
+
+</script>

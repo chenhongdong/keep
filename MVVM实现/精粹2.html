@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+	// 代码1
+	if (!('user' in window)) {
+		var user = 'zzz';
+	}
+	console.log(user);	// undefined
+
+	// 代码2
+	var obj = {
+		user: '三角箭',
+		getName: function() {
+			return this.user;
+		}
+	};
+	var getNameFn = obj.getName;
+	console.log(getNameFn());	// undfined
+	console.log(obj.getName());	// '三角箭'
+
+	// 作用域
+	/*
+		种类：
+			作用域由大到小：	
+				程序集
+				文件集
+				函数集
+				块集
+	*/
+	/*
+		js的作用域
+			全局： 
+			函数(局部)：
+			块级(ES6)
+	*/
+	var global = 1;
+	function fn() {
+		var inner = 2;
+		globalA = 3;
+	}
+	fn();
+	//console.log(global);	// 1
+	//console.log(globalA);	// 3
+	//console.log(inner);		// inner is not defined
+
+
+	// 闭包
+	// 代码1
+	function make(num) {
+		return function() {
+			return num;
+		}
+	}
+	var array = [make(0), make(1), make(2)];
+	console.log(array[0]());	
+	console.log(array[1]());
+	console.log(array[2]());
+	// 代码2
+	var name = 'global';
+	function A(name) {
+		alert(name);		// 3
+		this.name = name;
+		var name = '1';
+	}
+	A.prototype.name = '2';
+	var a = new A('3');
+	console.log(a.name);	// 3
+	delete a.name;
+	console.log(a.name);	// 2
+	// 代码3
+	function fun(n, o) {
+		console.log(o);
+		return {
+			fun: function(m) {
+				return fun(m, n);
+			}
+		}
+	}
+	// var a = fun(0);
+	// a.fun(1); a.fun(2);
+	var b = fun(0).fun(1).fun(2).fun(3);
+	// var c = fun(0).fun(1);
+	// c.fun(2); c.fun(3);
+</script>
