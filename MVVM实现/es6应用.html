@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+	// 模块语法
+	// 导入
+	//import {each, ...} from 'underscore.js';	// es6 按需引入
+	//var _ = require('underscore.js');			// amd 全局引入
+
+	// 导出
+	//export {each, map, ...};	// es6 多点暴露
+	//module.exports = _;			// amd 全局暴露
+
+	// 字符串
+	var num = Math.random();
+	var str = '随机数是${num}';
+	// 解构赋值
+		// 数组解构
+		var arr = [1, 2, 3, 4];
+		var [first, second] = arr;
+		// 对象解构
+		var obj = {a: 1, name: '樱木花道'};
+		var {a, b} = obj;
+		// 函数参数的解构赋值
+		function add([x, y]) {
+			return x + y;
+		}
+		add([1, 3]);	// 4
+	// 对象
+	var a = 1;
+	var json = {
+		a,
+		[a + 1]: 3,	// 可以给对象非静态key类型
+		add() {}
+	};
+	// 数组
+	var arr1 = [1, 2, 3];
+	var arr2 = [...arr1];	// es6 浅拷贝
+	console.log(arr2);
+	// 函数
+		// 箭头函数
+		[2, 3, 4].map(x => x + 1);
+		// rest参数
+		function aa(m, n, ...args) {
+			return args.join(',');
+		}
+
+		var a = aa(1, 9, ...[3, 4, 5]);
+		console.log(a);
+		// 默认值
+		function f(a = 1) {};
+	// Class
+	class Child extends Parent {
+		constructor() {
+			super();
+			this.value = 1;
+		}
+
+		get() {
+			return this.value;
+		}
+	}
+	// Promise
+</script>
