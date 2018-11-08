@@ -15,7 +15,7 @@ ws.on('connection', socket => {
         }));
     });
 
-    ws.on('message', data => {
+    socket.on('message', data => {
         clientRedis.rpush('barrages', data, redis.print);
         socket.send(JSON.stringify({
             type: 'add',

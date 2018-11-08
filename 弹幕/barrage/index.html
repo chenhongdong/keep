@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        .container {
+            position: relative;
+            width: 640px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        #canvas {
+            position: absolute;
+        }
+        input {
+            vertical-align: middle;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -12,6 +26,8 @@
             <canvas id="canvas"></canvas>
             <video src="../source/mv.mp4" id="video" width="640" height="420" controls></video>
         </div>
+        <input type="text" id="text"> <input type="button" value="发弹幕" id="btn">
+        <input type="color" id="color"> <input type="range" id="range" min="20" max="40">
     </div>
     <script src="index.js"></script>
 </body>

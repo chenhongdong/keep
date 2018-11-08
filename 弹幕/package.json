@@ -1,0 +1,9 @@
+{
+  "name": "dm",
+  "version": "0.0.1",
+  "description": "用canvas实现弹幕",
+  "dependencies": {
+    "redis": "^2.8.0",
+    "ws": "^6.1.0"
+  }
+}
