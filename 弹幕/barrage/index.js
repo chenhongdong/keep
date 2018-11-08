@@ -34,7 +34,6 @@ class Barrage {
         }
     }
     render() {
-        this.context.ctx.clearRect(0, 0, this.context.canvas.width, this.context.canvas.height);
         this.context.ctx.font = this.fontSize + 'px "Microsoft Yahei"';
         this.context.ctx.fillStyle = this.color;
         this.context.ctx.fillText(this.value, this.x, this.y);
@@ -78,7 +77,7 @@ class CanvasBarrage {
     renderBarrage() {
         let time = this.video.currentTime;
         this.barrages.forEach(barrage => {
-            if (!barrage.flag || time >= barrage.time) {
+            if (!barrage.flag && time >= barrage.time) {
                 if (!barrage.isInit) {
                     barrage.init();
                     barrage.isInit = true;
