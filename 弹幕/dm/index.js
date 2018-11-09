@@ -15,7 +15,7 @@ class Barrage {
     init() {
         this.speed = this.obj.speed || this.context.speed;
         this.color = this.obj.color || this.context.color;
-        this.fontSize = this.obj.fontSize ||　this.context.fontSize;
+        this.fontSize = this.obj.fontSize || 　this.context.fontSize;
         this.opacity = this.obj.opacity || this.context.opacity;
 
         // 需要创建个span元素，来计算弹幕的宽
@@ -94,6 +94,22 @@ class CanvasBarrage {
     clear() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
+    add(obj) {
+        this.barrages.push(new Barrage(obj, this));
+    }
+    reset() {
+        this.clear();
+        let time = this.video.currentTime;
+
+        this.barrages.forEach(barrage => {
+            barrage.flag = false;
+            if (time <= barrage.time) {
+                barrage.isInit = false;
+            } else {
+                barrage.flag = true;
+            }
+        });
+    }
 }
 
 ws.onopen = function () {
@@ -107,8 +123,37 @@ ws.onopen = function () {
         }
     };
 };
-
+// 点击播放按钮的时候，渲染所有的弹幕
 video.addEventListener('play', () => {
     canvasBarrage.isPaused = false;
     canvasBarrage.render();
+});
+// 点击暂停按钮可以停止渲染
+video.addEventListener('pause', () => {
+    canvasBarrage.isPaused = true;
+});
+// 当拖动进度条时，需要重新渲染在之前时间出现过的弹幕
+video.addEventListener('seeked', () => {
+    // 添加个reset方法
+    canvasBarrage.reset();
+});
+
+// 发送弹幕的函数
+function send() {
+    let value = $('#text').value;
+    let time = video.currentTime;
+    let color = $('#color').value;
+    let fontSize = $('#range').value;
+    let obj = { value, time, color, fontSize };
+    ws.send(JSON.stringify(obj));
+    $('#text').value = '';
+}
+// 添加弹幕
+$('#btn').addEventListener('click', send);
+// 回车发送弹幕
+$('#text').addEventListener('keydown', e => {
+    let code = e.keyCode;
+    if (code === 13) {
+        send();
+    }
 });
