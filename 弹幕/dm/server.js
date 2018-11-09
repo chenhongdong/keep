@@ -1,20 +1,21 @@
 const WebSocket = require('ws');
 const redis = require('redis');
 const clientRedis = redis.createClient();
+const ws = new WebSocket.Server({ port: 2000 });
 
-const ws = new WebSocket.Server({ port: 9999 });
 let clients = [];
+
 ws.on('connection', socket => {
     clients.push(socket);
-    
-    clientRedis.lrange('barrages', 0, -1, (err, applies) => {
-        applies = applies.map(apply => JSON.parse(apply));
+
+    clientRedis.lrange('barrages', 0, -1, (err, res) => {
+        res = res.map(data => JSON.parse(data));
         socket.send(JSON.stringify({
             type: 'init',
-            data: applies || []
+            data: res
         }));
     });
-    console.log('连接成功');
+
     socket.on('message', data => {
         clientRedis.rpush('barrages', data, redis.print);
         socket.send(JSON.stringify({
@@ -23,7 +24,7 @@ ws.on('connection', socket => {
         }));
     });
 
-    ws.on('close', () => {
+    socket.on('close', () => {
         clients = clients.filter(client => client !== socket);
     });
 });

@@ -1,73 +1,71 @@
 let $ = document.querySelector.bind(document);
 let canvas = $('#canvas');
 let video = $('#video');
-// 每一个弹幕的类
+
+let canvasBarrage;
+let ws = new WebSocket('ws://localhost:2000');
+
 class Barrage {
-    constructor(obj, context) {
+    constructor(obj, ctx) {
         this.value = obj.value;
         this.time = obj.time;
         this.obj = obj;
-        this.context = context;
+        this.context = ctx;
     }
     init() {
-        this.opacity = this.obj.opacity || this.context.opacity;
-        this.color = this.obj.color || this.context.color;
         this.speed = this.obj.speed || this.context.speed;
-        this.fontSize = this.obj.fontSize || this.context.fontSize;
+        this.color = this.obj.color || this.context.color;
+        this.fontSize = this.obj.fontSize ||　this.context.fontSize;
+        this.opacity = this.obj.opacity || this.context.opacity;
 
+        // 需要创建个span元素，来计算弹幕的宽
         let span = document.createElement('span');
         span.style.position = 'absolute';
-        span.style.fontSize = this.fontSize + 'px';
-        span.innerText = this.value;
+        span.style.font = `${this.fontSize}px`;
+        span.innerHTML = this.value;
         document.body.appendChild(span);
-        // 给每个弹幕设宽高
+        // 获取每个弹幕的宽度，然后再把span删掉
         this.width = span.clientWidth;
         document.body.removeChild(span);
 
         this.x = this.context.canvas.width;
         this.y = this.context.canvas.height * Math.random();
 
-        if (this.y <= this.fontSize) {
-            this.y = this.fontSize;
+        if (this.y < this.fontSize) {
+            this.y = this.fontSize
         } else if (this.y > this.context.canvas.height - this.fontSize) {
             this.y = this.context.canvas.height - this.fontSize;
         }
     }
     render() {
-        this.context.ctx.font = this.fontSize + 'px "Microsoft Yahei"';
+        this.context.ctx.font = `${this.fontSize}px "Microsoft Yahei"`;
         this.context.ctx.fillStyle = this.color;
         this.context.ctx.fillText(this.value, this.x, this.y);
     }
 }
-// CanvasBarrage类
+
 class CanvasBarrage {
     constructor(canvas, video, options = {}) {
         if (!canvas || !video) return;
-        // 设置一些canvas的内容，如宽高和画布
         this.canvas = canvas;
         this.canvas.width = video.width;
         this.canvas.height = video.height;
         this.ctx = canvas.getContext('2d');
         this.video = video;
         // 默认参数
-        let defaultOptions = {
-            color: '#f25d8e',
-<<<<<<< HEAD
-            speed: 2,
-=======
+        let defaultOpts = {
             speed: 1.5,
->>>>>>> 22986e92432c868500578a651cedcb6b48c8b725
+            color: '#00a1f4',
+            opacity: 0.4,
             fontSize: 22,
-            opacity: 0.3,
             data: []
         };
-        // 合并对象，把参数全挂到this实例上
-        Object.assign(this, defaultOptions, options);
-
-        this.isPaused = true;   // 默认暂停
+        Object.assign(this, defaultOpts, options);
+        // 是否暂停，默认true为暂停
+        this.isPaused = true;
         // 所有的弹幕
         this.barrages = this.data.map(obj => new Barrage(obj, this));
-        //  渲染弹幕
+        // 渲染弹幕
         this.render();
     }
     render() {
@@ -87,27 +85,9 @@ class CanvasBarrage {
                 }
                 barrage.x -= barrage.speed;
                 barrage.render();
-
                 if (barrage.x < -barrage.width) {
                     barrage.flag = true;
                 }
-            }
-        });
-    }
-    add(obj) {
-        this.barrages.push(new Barrage(obj, this));
-    }
-    reset() {
-        console.log('reset');
-        this.clear();
-        let time = this.video.currentTime;
-
-        this.barrages.forEach(barrage => {
-            barrage.flag = false;
-            if (time <= barrage.time) {
-                barrage.isInit = false;
-            } else {
-                barrage.flag = true;
             }
         });
     }
@@ -116,15 +96,12 @@ class CanvasBarrage {
     }
 }
 
-let canvasBarrage;
-let ws = new WebSocket('ws://localhost:9999');
-
 ws.onopen = function () {
     ws.onmessage = function (e) {
         let msg = JSON.parse(e.data);
+        console.log(msg);
         if (msg.type === 'init') {
             canvasBarrage = new CanvasBarrage(canvas, video, { data: msg.data });
-            console.log(canvasBarrage);
         } else if (msg.type === 'add') {
             canvasBarrage.add(msg.data);
         }
@@ -132,47 +109,6 @@ ws.onopen = function () {
 };
 
 video.addEventListener('play', () => {
-    canvas.style.display = 'block';
-    
     canvasBarrage.isPaused = false;
     canvasBarrage.render();
-});
-
-video.addEventListener('pause', () => {
-    canvasBarrage.isPaused = true;
-});
-
-video.addEventListener('seeked', () => {
-    canvasBarrage.reset();
-});
-
-video.addEventListener('ended', () => {
-    console.log('end');
-    canvasBarrage.isPaused = true;
-    canvasBarrage.clear();
-    canvas.style.display = 'none';
-});
-
-function send() {
-    let time = video.currentTime;
-    let value = $('#text').value;
-    let color = $('#color').value;
-    let fontSize = $('#range').value;
-    let obj = { time, value, color, fontSize };
-
-    ws.send(JSON.stringify(obj));
-    $('#text').value = '';
-}
-
-// 添加弹幕
-$('#btn').addEventListener('click', () => {
-    send();
-});
-
-
-$('#text').addEventListener('keydown', e => {
-    let code = e.keyCode;
-    if (code === 13) {
-        send();
-    }
 });

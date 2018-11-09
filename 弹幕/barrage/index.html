@@ -8,6 +8,9 @@
     <style>
         .container {
             position: relative;
+            width: 640px;
+            margin: 0 auto;
+            text-align: center;
         }
         #canvas {
             position: absolute;
@@ -23,8 +26,8 @@
             <canvas id="canvas"></canvas>
             <video src="../source/mv.mp4" id="video" width="640" height="420" controls></video>
         </div>
-        <input type="text" id="text"> <input type="button" id="btn" value="发弹幕">
-        <input type="color" id="color"> <input type="range" min="20" max="40" id="range">
+        <input type="text" id="text"> <input type="button" value="发弹幕" id="btn">
+        <input type="color" id="color"> <input type="range" id="range" min="20" max="40">
     </div>
     <script src="index.js"></script>
 </body>
