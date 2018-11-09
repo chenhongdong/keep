@@ -23,3 +23,11 @@ class CanvasBarrage {
 // 创建一个CanvasBarrage实例
 let canvasBarrage = new CanvasBarrage(canvas, video, { data });
 ```
+
+### 启动redis服务
+首先需要安装一下，windows系统下载地址
+进入安装好的redis服务端目录
+```
+// windows系统在命令行里执行
+redis-server.exe redis.windows.conf
+```

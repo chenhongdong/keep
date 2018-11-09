@@ -9,13 +9,14 @@ ws.on('connection', socket => {
     
     clientRedis.lrange('barrages', 0, -1, (err, applies) => {
         applies = applies.map(apply => JSON.parse(apply));
+        console.log(applies);
         socket.send(JSON.stringify({
             type: 'init',
-            data: applies
+            data: applies || []
         }));
     });
-
-    ws.on('message', data => {
+    console.log('连接成功');
+    socket.on('message', data => {
         clientRedis.rpush('barrages', data, redis.print);
         socket.send(JSON.stringify({
             type: 'add',

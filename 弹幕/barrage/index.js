@@ -4,8 +4,8 @@ let video = $('#video');
 // 每一个弹幕的类
 class Barrage {
     constructor(obj, context) {
-        this.value = this.obj.value;
-        this.time = this.obj.time;
+        this.value = obj.value;
+        this.time = obj.time;
         this.obj = obj;
         this.context = context;
     }
@@ -17,20 +17,20 @@ class Barrage {
 
         let span = document.createElement('span');
         span.style.position = 'absolute';
-        span.style.fontSize = this.fontSize + 'px';        
+        span.style.fontSize = this.fontSize + 'px';
         span.innerText = this.value;
         document.body.appendChild(span);
         // 给每个弹幕设宽高
         this.width = span.clientWidth;
         document.body.removeChild(span);
-        
-        this.x = this.video.width;
-        this.y = this.video.height * Math.random();
+
+        this.x = this.context.canvas.width;
+        this.y = this.context.canvas.height * Math.random();
 
         if (this.y <= this.fontSize) {
             this.y = this.fontSize;
-        } else if (this.y > this.video.height - this.fontSize) {
-            this.y = this.video.height - this.fontSize;
+        } else if (this.y > this.context.canvas.height - this.fontSize) {
+            this.y = this.context.canvas.height - this.fontSize;
         }
     }
     render() {
@@ -52,7 +52,7 @@ class CanvasBarrage {
         // 默认参数
         let defaultOptions = {
             color: '#f25d8e',
-            speed: 1,
+            speed: 2,
             fontSize: 22,
             opacity: 0.3,
             data: []
@@ -61,7 +61,6 @@ class CanvasBarrage {
         Object.assign(this, defaultOptions, options);
 
         this.isPaused = true;   // 默认暂停
-        console.log(this);
         // 所有的弹幕
         this.barrages = this.data.map(obj => new Barrage(obj, this));
         //  渲染弹幕
@@ -91,13 +90,28 @@ class CanvasBarrage {
             }
         });
     }
+    add(obj) {
+        this.barrages.push(new Barrage(obj, this));
+    }
+    reset() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        let time = this.video.currentTime;
+        this.barrages.forEach(barrage => {
+                barrage.flag = false;
+                if (time <= barrage.time) {
+                    barrage.isInit = false;
+                } else {
+                    barrage.flag = true;
+                }
+        });
+    }
 }
 
 let canvasBarrage;
 let ws = new WebSocket('ws://localhost:9999');
 
-ws.onopen = function() {
-    ws.onmessage = function(e) {
+ws.onopen = function () {
+    ws.onmessage = function (e) {
         let msg = JSON.parse(e.data);
         console.log(msg);
         if (msg.type === 'init') {
@@ -107,3 +121,28 @@ ws.onopen = function() {
         }
     };
 };
+
+// 播放视频渲染弹幕
+video.addEventListener('play', () => {
+    canvasBarrage.isPaused = false;
+    canvasBarrage.render();
+});
+
+video.addEventListener('pause', () => {
+    canvasBarrage.isPaused = true;
+});
+
+video.addEventListener('seeked', () => {
+    canvasBarrage.reset();
+});
+
+$('#btn').addEventListener('click', () => {
+    let value = $('#text').value;
+    let color = $('#color').value;
+    let fontSize = $('#range').value;
+    let time = video.currentTime;
+    let obj = { value, color, fontSize, time };
+    console.log(obj);
+    console.log(ws);
+    ws.send(JSON.stringify(obj));
+});
