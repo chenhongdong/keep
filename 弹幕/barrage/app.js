@@ -17,10 +17,14 @@ ws.on('connection', socket => {
     console.log('连接成功');
     socket.on('message', data => {
         clientRedis.rpush('barrages', data, redis.print);
-        socket.send(JSON.stringify({
-            type: 'add',
-            data: JSON.parse(data)
-        }));
+        // 遍历clients数组，拿到所有的socket实例
+        // 每一个用户发送的消息，在所有连接ws服务端成功的用户中都可以看见
+        clients.forEach(sk => {
+            sk.send(JSON.stringify({
+                type: 'add',
+                data: JSON.parse(data)
+            }));
+        }); 
     });
 
     socket.on('close', () => {

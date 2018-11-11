@@ -18,10 +18,12 @@ ws.on('connection', socket => {
 
     socket.on('message', data => {
         clientRedis.rpush('barrages', data, redis.print);
-        socket.send(JSON.stringify({
-            type: 'add',
-            data: JSON.parse(data)
-        }));
+        clients.forEach(sk => {
+            sk.send(JSON.stringify({
+                type: 'add',
+                data: JSON.parse(data)
+            }));
+        });
     });
 
     socket.on('close', () => {
