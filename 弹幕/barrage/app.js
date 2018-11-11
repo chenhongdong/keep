@@ -23,7 +23,7 @@ ws.on('connection', socket => {
         }));
     });
 
-    ws.on('close', () => {
+    socket.on('close', () => {
         clients = clients.filter(client => client !== socket);
     });
 });

@@ -52,11 +52,7 @@ class CanvasBarrage {
         // 默认参数
         let defaultOptions = {
             color: '#f25d8e',
-<<<<<<< HEAD
-            speed: 2,
-=======
             speed: 1.5,
->>>>>>> 22986e92432c868500578a651cedcb6b48c8b725
             fontSize: 22,
             opacity: 0.3,
             data: []
